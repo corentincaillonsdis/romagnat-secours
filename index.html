@@ -548,7 +548,7 @@
           updateSyncBadge(true);
           if (snap.exists()) {
             const remote = snap.data();
-            if (remote && Array.isArray(remote.items)) {
+            if (remote && Array.isArray(remote.items) && remote.items.length > 0) {
               state = {
                 items: remote.items,
                 movements: remote.movements || [],
@@ -556,8 +556,11 @@
                 adminPin: remote.adminPin || "1818",
                 publicUrl: remote.publicUrl || state.publicUrl
               };
-              renderAll();
+            } else {
+              // Remote exists but items array is empty -> initialize with default items
+              await setDoc(STATE_DOC_REF, state);
             }
+            renderAll();
           } else {
             await setDoc(STATE_DOC_REF, state);
           }
@@ -573,7 +576,7 @@
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        if (parsed.items) state = parsed;
+        if (parsed.items && parsed.items.length > 0) state = parsed;
       } catch (e) {}
     }
 
@@ -624,7 +627,6 @@
         btn.className = "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700";
         label.textContent = "Mode Pompier";
         icon.setAttribute("data-lucide", "shield");
-        // Redirect if currently on an admin-only tab
         const activeTab = document.querySelector(".tab-btn.border-red-500")?.id;
         if (activeTab === "tab-mouvements" || activeTab === "tab-commandes") {
           switchTab("verif");
@@ -652,7 +654,6 @@
       lucide.createIcons();
     };
 
-    // EXPIRY HELPER
     function getExpiryStatus(expiryStr) {
       if (!expiryStr) return "ok";
       const now = new Date();
@@ -757,7 +758,6 @@
       alert(`Contrôle du Lot de secours « Romagnat » validé et enregistré par ${agent} !`);
     };
 
-    // INVENTORY & MOVEMENTS
     window.quickBagUse = async function (id) {
       const item = state.items.find((i) => i.id === id);
       if (!item) return;
@@ -940,7 +940,6 @@
       }).join("");
     }
 
-    // ADMIN ITEM MODAL
     window.openItemModal = function (id = null) {
       const modal = document.getElementById("item-modal");
       const delBtn = document.getElementById("btn-delete-item");
@@ -1010,7 +1009,6 @@
       await persistState();
     };
 
-    // ADMIN SETTINGS & EXPORTS
     window.updateAdminPin = async function () {
       const newPin = document.getElementById("new-pin-input").value.trim();
       if (newPin.length < 4) return alert("Le code PIN doit contenir au moins 4 chiffres.");
@@ -1034,16 +1032,14 @@
         const qty = Math.max(1, i.minStock * 2 - i.reserveQty);
         lines.push(`- ${i.name} (${i.compartment}) : +${qty} unité(s) [Stock actuel: ${i.reserveQty}]`);
       });
-      navigator.clipboard.writeText(lines.join("
-"));
+      navigator.clipboard.writeText(lines.join("\n"));
       alert("Liste de commande copiée dans le presse-papiers !");
     };
 
     window.exportMovementsCSV = function () {
       const rows = [["Date", "Type", "Article", "Quantite", "Intervenant"]];
       state.movements.forEach((m) => rows.push([m.date, m.type, `"${m.item}"`, m.qty, `"${m.agent}"`]));
-      const csv = rows.map((r) => r.join(";")).join("
-");
+      const csv = rows.map((r) => r.join(";")).join("\n");
       const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
@@ -1059,7 +1055,6 @@
       a.click();
     };
 
-    // QR CODE GENERATOR
     window.savePublicUrl = async function () {
       const url = document.getElementById("public-url-input").value.trim();
       if (!url) return;
@@ -1095,7 +1090,6 @@
       lucide.createIcons();
     }
 
-    // INIT
     renderAll();
     generateQRCode();
   </script>
