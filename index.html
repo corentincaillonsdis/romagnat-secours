@@ -1,2130 +1,1103 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PharmaSecours — Lot de secours « Romagnat » & Pharmacie Caserne</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Police Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- Icônes Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Générateur QR Code -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'media',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        fire: {
-                            50: '#fef2f2',
-                            100: '#fee2e2',
-                            500: '#ef4444',
-                            600: '#dc2626',
-                            700: '#b91c1c',
-                            800: '#991b1b',
-                            900: '#7f1d1d',
-                            950: '#450a0a',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .tab-active {
-            border-bottom: 3px solid #dc2626;
-            color: #dc2626;
-        }
-        @media (prefers-color-scheme: dark) {
-            .tab-active {
-                border-bottom: 3px solid #ef4444;
-                color: #f87171;
-            }
-        }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* Styles dédiés à l'impression de la fiche QR Code Camion */
-        @media print {
-            body * { visibility: hidden !important; }
-            #printableQrSheet, #printableQrSheet * {
-                visibility: visible !important;
-            }
-            #printableQrSheet {
-                position: fixed !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                border: 2px solid #0f172a !important;
-                box-shadow: none !important;
-                margin: 0 !important;
-                padding: 24px !important;
-                background: white !important;
-                color: black !important;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PharmaSecours — Lot de secours « Romagnat »</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    @media print {
+      body * { visibility: hidden; }
+      #printable-qr-sheet, #printable-qr-sheet * { visibility: visible; }
+      #printable-qr-sheet {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none !important;
+        border: none !important;
+      }
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
 
-    <!-- EN-TÊTE PRINCIPAL -->
-    <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap items-center justify-between py-3 gap-3">
-                <!-- Identité Caserne -->
-                <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-xl bg-fire-600 flex items-center justify-center text-white shadow-md shadow-fire-600/20 shrink-0">
-                        <i data-lucide="cross" class="w-6 h-6 stroke-[2.75]"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                                PharmaSecours
-                            </h1>
-                            <span id="syncStatusBadge" class="inline-flex items-center gap-1 px-2 py-0.5 text-[11px] font-semibold rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-                                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-                                Local
-                            </span>
-                        </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">
-                            Caserne &bull; Lot de secours &laquo; Romagnat &raquo;
-                        </p>
-                    </div>
-                </div>
+  <!-- TOP NAVBAR -->
+  <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="bg-red-600 p-2 rounded-xl shadow-inner">
+          <i data-lucide="cross" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-extrabold text-lg tracking-tight leading-none">PharmaSecours</h1>
+            <span id="sync-badge" class="inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+              Connexion...
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">Lot de secours « Romagnat » • Sac Bagheera & Pharmacie</p>
+        </div>
+      </div>
 
-                <!-- Bouton Bascule Mode Pompier / Mode Responsable (PIN) -->
-                <div class="flex items-center gap-2">
-                    <button id="adminModeBtn" onclick="toggleAdminMode()" class="inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-bold rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white border border-slate-700 shadow-sm transition">
-                        <i id="adminLockIcon" data-lucide="lock" class="w-4 h-4 text-amber-400"></i>
-                        <span id="adminModeLabel">Mode Pompier</span>
-                    </button>
+      <div class="flex items-center gap-2">
+        <button onclick="toggleAdminMode()" id="btn-role-toggle" class="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700">
+          <i data-lucide="shield" class="w-4 h-4 text-emerald-400" id="role-icon"></i>
+          <span id="role-label">Mode Pompier</span>
+        </button>
+      </div>
+    </div>
 
-                    <!-- Bouton Ajout Article (Visible uniquement en Mode Responsable) -->
-                    <button onclick="openItemModal()" class="admin-only hidden inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-fire-600 hover:bg-fire-700 active:scale-95 text-white shadow-sm shadow-fire-600/20 transition">
-                        <i data-lucide="plus" class="w-4 h-4"></i>
-                        <span class="hidden sm:inline">Nouvel article</span>
-                    </button>
-                </div>
+    <!-- NAVIGATION TABS -->
+    <nav class="bg-slate-800/80 border-t border-slate-700/80 overflow-x-auto">
+      <div class="max-w-7xl mx-auto px-4 flex gap-1">
+        <button onclick="switchTab('verif')" id="tab-verif" class="tab-btn flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 border-red-500 text-white whitespace-nowrap">
+          <i data-lucide="clipboard-check" class="w-4 h-4"></i>
+          Vérif. Lot Secours
+        </button>
+        <button onclick="switchTab('stocks')" id="tab-stocks" class="tab-btn flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap">
+          <i data-lucide="package" class="w-4 h-4"></i>
+          Inventaire & Réserve
+        </button>
+        <button onclick="switchTab('mouvements')" id="tab-mouvements" class="admin-only hidden tab-btn flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap">
+          <i data-lucide="history" class="w-4 h-4"></i>
+          Historique Mouvements
+        </button>
+        <button onclick="switchTab('commandes')" id="tab-commandes" class="admin-only hidden tab-btn flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap">
+          <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+          Commandes & Paramètres
+          <span id="badge-order-count" class="bg-red-600 text-white text-[10px] px-1.5 py-0.2 rounded-full">0</span>
+        </button>
+        <button onclick="switchTab('qrcode')" id="tab-qrcode" class="tab-btn flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 border-transparent text-slate-400 hover:text-white whitespace-nowrap">
+          <i data-lucide="qr-code" class="w-4 h-4"></i>
+          QR Code Camion
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6">
+
+    <!-- ==================== TAB 1: VERIFICATION LOT DE SECOURS ==================== -->
+    <section id="view-verif" class="space-y-5">
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-extrabold text-slate-900">Contrôle du Lot de secours « Romagnat »</h2>
+          <p class="text-xs text-slate-500 mt-0.5" id="last-verif-info">Dernière vérification enregistrée : Aucune</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2 bg-slate-100 px-3 py-2 rounded-xl">
+            <span class="text-xs font-semibold text-slate-600">Progression :</span>
+            <span id="verif-progress-text" class="text-xs font-extrabold text-slate-900">0 / 52</span>
+            <div class="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div id="verif-progress-bar" class="h-full bg-emerald-500 transition-all duration-300" style="width: 0%"></div>
             </div>
+          </div>
+          <button onclick="resetChecklist()" class="px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl border border-slate-200">
+            Réinitialiser coches
+          </button>
+        </div>
+      </div>
 
-            <!-- Bandeau d'état Mode Responsable Actif -->
-            <div id="adminBanner" class="hidden mb-2 px-3.5 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800/80 flex flex-wrap items-center justify-between gap-2 text-xs">
-                <div class="flex items-center gap-2 text-amber-900 dark:text-amber-200 font-semibold">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0"></i>
-                    <span>Mode Responsable Pharmacie activé (édition complète, seuils, péremptions et commandes autorisés)</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="exportDataJSON()" class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 font-semibold hover:bg-amber-100 transition">
-                        Sauvegarde JSON
-                    </button>
-                    <label class="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 text-amber-900 dark:text-amber-200 font-semibold hover:bg-amber-100 transition cursor-pointer">
-                        Restaurer
-                        <input type="file" id="importJsonInput" accept=".json" class="hidden" onchange="importDataJSON(event)">
+      <!-- COMPARTMENTS CHECKLIST -->
+      <div id="verif-container" class="space-y-4"></div>
+
+      <!-- VALIDATION FOOTER -->
+      <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+        <div class="flex-1">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nom / Matricule du vérificateur (obligatoire pour signer)</label>
+          <input type="text" id="verif-agent-name" placeholder="Ex: Caporal Dupont / Equipe Garde" class="w-full sm:max-w-md px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none" />
+        </div>
+        <button onclick="submitVerification()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+          <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+          Valider et signer le contrôle du sac
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: INVENTAIRE & RESERVE ==================== -->
+    <section id="view-stocks" class="hidden space-y-5">
+      <!-- KPI CARDS (Admin Only for low stock / expiry alerts) -->
+      <div id="admin-kpi-row" class="admin-only hidden grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <p class="text-xs font-semibold text-slate-500">Références suivies</p>
+            <p id="kpi-total-items" class="text-2xl font-extrabold text-slate-900 mt-1">52</p>
+          </div>
+          <div class="p-3 bg-blue-50 text-blue-600 rounded-xl"><i data-lucide="layers" class="w-6 h-6"></i></div>
+        </div>
+        <div onclick="setQuickFilter('low')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200 hover:border-red-300 shadow-sm flex items-center justify-between transition">
+          <div>
+            <p class="text-xs font-semibold text-slate-500">Alertes Stock Bas (Réserve)</p>
+            <p id="kpi-low-stock" class="text-2xl font-extrabold text-red-600 mt-1">0</p>
+          </div>
+          <div class="p-3 bg-red-50 text-red-600 rounded-xl"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
+        </div>
+        <div onclick="setQuickFilter('expiry')" class="cursor-pointer bg-white p-4 rounded-2xl border border-slate-200 hover:border-amber-300 shadow-sm flex items-center justify-between transition">
+          <div>
+            <p class="text-xs font-semibold text-slate-500">Péremptions proches (&lt; 3 mois)</p>
+            <p id="kpi-expiry" class="text-2xl font-extrabold text-amber-600 mt-1">0</p>
+          </div>
+          <div class="p-3 bg-amber-50 text-amber-600 rounded-xl"><i data-lucide="calendar-clock" class="w-6 h-6"></i></div>
+        </div>
+      </div>
+
+      <!-- FILTERS & SEARCH -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2 flex-1">
+          <div class="relative flex-1 min-w-[200px]">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+            <input type="text" id="search-input" oninput="renderStocks()" placeholder="Rechercher un matériel, une trousse..." class="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-slate-400" />
+          </div>
+          <select id="filter-compartment" onchange="renderStocks()" class="px-3 py-2 text-sm border border-slate-200 rounded-xl bg-white">
+            <option value="ALL">Toutes les trousses (8)</option>
+            <option value="Trousse Verte">Trousse Verte</option>
+            <option value="Trousse Rouge">Trousse Rouge</option>
+            <option value="Poche Sac de Secours">Poche Sac de Secours</option>
+            <option value="Trousse Noire">Trousse Noire</option>
+            <option value="Trousse Orange">Trousse Orange</option>
+            <option value="Sac Oxygène">Sac Oxygène</option>
+            <option value="Trousse Bleue">Trousse Bleue</option>
+            <option value="DSA">DSA</option>
+          </select>
+          <button id="btn-clear-quick-filter" onclick="setQuickFilter('all')" class="hidden px-3 py-2 text-xs font-bold bg-slate-800 text-white rounded-xl">
+            Afficher tout ×
+          </button>
+        </div>
+
+        <button onclick="openItemModal()" class="admin-only hidden px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          Nouvel article
+        </button>
+      </div>
+
+      <!-- INVENTORY TABLE -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <th class="py-3 px-4">Compartiment</th>
+                <th class="py-3 px-4">Désignation</th>
+                <th class="py-3 px-4 text-center">Sac (Actuel / Dotation)</th>
+                <th class="py-3 px-4 text-center">Réserve Pharmacie</th>
+                <th class="admin-only hidden py-3 px-4">Lot & Péremption</th>
+                <th class="py-3 px-4 text-right">Actions rapides</th>
+              </tr>
+            </thead>
+            <tbody id="stocks-tbody" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: HISTORIQUE MOUVEMENTS (ADMIN ONLY) ==================== -->
+    <section id="view-mouvements" class="hidden space-y-4">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-extrabold text-slate-900">Journal des Entrées / Sorties & Contrôles</h2>
+          <p class="text-xs text-slate-500">Traçabilité synchronisée en direct de toutes les opérations effectuées par l'équipe.</p>
+        </div>
+        <button onclick="exportMovementsCSV()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl flex items-center gap-2">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          Exporter CSV
+        </button>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <th class="py-3 px-4">Date & Heure</th>
+                <th class="py-3 px-4">Type</th>
+                <th class="py-3 px-4">Article / Détail</th>
+                <th class="py-3 px-4 text-center">Qté</th>
+                <th class="py-3 px-4">Intervenant / Motif</th>
+              </tr>
+            </thead>
+            <tbody id="movements-tbody" class="divide-y divide-slate-100 text-sm"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: COMMANDES & PARAMETRES (ADMIN ONLY) ==================== -->
+    <section id="view-commandes" class="hidden space-y-5">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-extrabold text-slate-900">Préparation de Commande Pharmacie</h2>
+          <p class="text-xs text-slate-500">Articles sous le seuil d'alerte ou dont la péremption approche (&lt; 3 mois).</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="copyOrderToClipboard()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-2">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            Copier la liste pour mail
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <th class="py-3 px-4">Article</th>
+              <th class="py-3 px-4">Motif alerte</th>
+              <th class="py-3 px-4 text-center">Réserve actuelle</th>
+              <th class="py-3 px-4 text-center">Seuil mini</th>
+              <th class="py-3 px-4 text-center">Qté à commander</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody" class="divide-y divide-slate-100 text-sm"></tbody>
+        </table>
+      </div>
+
+      <!-- ADMIN SETTINGS -->
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-sm font-extrabold text-slate-900 mb-2">Sécurité Mode Responsable (Code PIN)</h3>
+          <div class="flex gap-2">
+            <input type="password" id="new-pin-input" maxlength="6" placeholder="Nouveau PIN (actuel: 1818)" class="px-3 py-2 text-sm border border-slate-300 rounded-xl w-48" />
+            <button onclick="updateAdminPin()" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl">Modifier PIN</button>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-sm font-extrabold text-slate-900 mb-2">Sauvegarde de secours (JSON)</h3>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="exportBackupJSON()" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl">Exporter sauvegarde</button>
+            <button onclick="resetDefaultCatalog()" class="px-3.5 py-2 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-bold rounded-xl">Réinitialiser dotation Bagheera</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 5: QR CODE CAMION ==================== -->
+    <section id="view-qrcode" class="hidden space-y-5">
+      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-stretch md:items-end justify-between gap-4">
+        <div class="flex-1">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Lien public de l'application (GitHub Pages / Netlify)</label>
+          <div class="flex gap-2">
+            <input type="url" id="public-url-input" placeholder="https://votre-pseudo.github.io/romagnat-secours/" class="flex-1 px-3.5 py-2 text-sm border border-slate-300 rounded-xl" />
+            <button onclick="savePublicUrl()" class="px-4 py-2 bg-slate-900 text-white text-xs font-bold rounded-xl">Enregistrer</button>
+          </div>
+          <p class="text-[11px] text-slate-500 mt-1">Le QR Code pointe directement vers l'onglet de vérification du sac (<code class="bg-slate-100 px-1 rounded">?view=verif</code>).</p>
+        </div>
+        <button onclick="window.print()" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-sm">
+          <i data-lucide="printer" class="w-4 h-4"></i>
+          Imprimer la fiche camion
+        </button>
+      </div>
+
+      <!-- PRINTABLE CARD -->
+      <div id="printable-qr-sheet" class="max-w-lg mx-auto bg-white border-2 border-slate-900 rounded-3xl p-8 text-center shadow-lg space-y-5">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-extrabold uppercase tracking-wider">
+          Sapeurs-Pompiers • Caserne de Romagnat
+        </div>
+        <div>
+          <h2 class="text-2xl font-black text-slate-900">LOT DE SECOURS « ROMAGNAT »</h2>
+          <p class="text-sm font-semibold text-slate-600 mt-1">Vérification Sac Bagheera & Déclaration Retour d'Intervention</p>
+        </div>
+        <div class="flex justify-center py-2">
+          <div id="qrcode-box" class="p-4 bg-white border-2 border-slate-200 rounded-2xl inline-block"></div>
+        </div>
+        <div class="bg-slate-50 rounded-2xl p-4 text-left space-y-2 border border-slate-200 text-xs text-slate-700">
+          <p class="font-extrabold text-slate-900 uppercase">Procédure équipage :</p>
+          <p><strong>1.</strong> Scannez ce QR Code avec l'appareil photo de votre smartphone.</p>
+          <p><strong>2.</strong> Cochez le matériel vérifié trousse par trousse ou déclarez le matériel utilisé (<span class="font-bold text-red-600">-1 Inter</span>).</p>
+          <p><strong>3.</strong> Saisissez votre nom et cliquez sur <span class="font-bold text-emerald-700">Valider et signer</span>.</p>
+        </div>
+        <p id="qr-url-caption" class="text-[10px] text-slate-400 break-all"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: EDIT / ADD ITEM (ADMIN) -->
+  <div id="item-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 id="modal-title" class="text-base font-extrabold text-slate-900">Modifier l'article</h3>
+        <button onclick="closeItemModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <input type="hidden" id="edit-item-id" />
+      <div class="space-y-3 text-sm">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Compartiment / Trousse</label>
+          <select id="edit-compartment" class="w-full px-3 py-2 border border-slate-300 rounded-xl">
+            <option value="Trousse Verte">Trousse Verte</option>
+            <option value="Trousse Rouge">Trousse Rouge</option>
+            <option value="Poche Sac de Secours">Poche Sac de Secours</option>
+            <option value="Trousse Noire">Trousse Noire</option>
+            <option value="Trousse Orange">Trousse Orange</option>
+            <option value="Sac Oxygène">Sac Oxygène</option>
+            <option value="Trousse Bleue">Trousse Bleue</option>
+            <option value="DSA">DSA</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Désignation du matériel</label>
+          <input type="text" id="edit-name" class="w-full px-3 py-2 border border-slate-300 rounded-xl" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Dotation Sac</label>
+            <input type="number" id="edit-bag-target" min="0" class="w-full px-3 py-2 border border-slate-300 rounded-xl" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Actuel dans Sac</label>
+            <input type="number" id="edit-bag-qty" min="0" class="w-full px-3 py-2 border border-slate-300 rounded-xl" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Stock Réserve</label>
+            <input type="number" id="edit-reserve-qty" min="0" class="w-full px-3 py-2 border border-slate-300 rounded-xl" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Seuil Alerte Mini</label>
+            <input type="number" id="edit-min-stock" min="0" class="w-full px-3 py-2 border border-slate-300 rounded-xl" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">N° de Lot</label>
+            <input type="text" id="edit-lot" placeholder="Ex: LOT-2026A" class="w-full px-3 py-2 border border-slate-300 rounded-xl" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Date Péremption</label>
+            <input type="date" id="edit-expiry" class="w-full px-3 py-2 border border-slate-300 rounded-xl" />
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-2">
+        <button id="btn-delete-item" onclick="deleteCurrentItem()" class="text-xs font-bold text-red-600 hover:underline">Supprimer</button>
+        <div class="flex gap-2">
+          <button onclick="closeItemModal()" class="px-4 py-2 text-xs font-bold text-slate-600 bg-slate-100 rounded-xl">Annuler</button>
+          <button onclick="saveItemModal()" class="px-4 py-2 text-xs font-bold text-white bg-slate-900 rounded-xl">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PIN ENTRY -->
+  <div id="pin-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl max-w-xs w-full p-6 shadow-xl text-center space-y-4">
+      <div class="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto text-slate-800">
+        <i data-lucide="lock" class="w-6 h-6"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-extrabold text-slate-900">Accès Responsable</h3>
+        <p class="text-xs text-slate-500 mt-1">Entrez le code PIN pharmacie (défaut : 1818)</p>
+      </div>
+      <input type="password" id="pin-input" maxlength="6" placeholder="••••" class="w-full text-center text-xl tracking-widest font-extrabold py-2.5 border border-slate-300 rounded-xl focus:border-slate-900 outline-none" onkeydown="if(event.key==='Enter') verifyPin()" />
+      <div class="flex gap-2">
+        <button onclick="closePinModal()" class="flex-1 py-2 text-xs font-bold text-slate-600 bg-slate-100 rounded-xl">Annuler</button>
+        <button onclick="verifyPin()" class="flex-1 py-2 text-xs font-bold text-white bg-slate-900 rounded-xl">Déverrouiller</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIREBASE & APP LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCTSWq9WSd-NBDGWTu-uPWf7Ae6a1Zw514",
+      authDomain: "romagnat-secours.firebaseapp.com",
+      projectId: "romagnat-secours",
+      storageBucket: "romagnat-secours.firebasestorage.app",
+      messagingSenderId: "789958637085",
+      appId: "1:789958637085:web:85f2613358230134ddf8f4",
+      measurementId: "G-KGF0Y2BHR8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const STATE_DOC_REF = doc(db, "caserne_romagnat", "lot_secours_state");
+
+    const INITIAL_ITEMS = [
+      // TROUSSE VERTE (11)
+      { id: "tv-1", compartment: "Trousse Verte", name: "Bandes extensibles 7 cm", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 3, lot: "", expiry: "" },
+      { id: "tv-2", compartment: "Trousse Verte", name: "Bandes extensibles 10 cm", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 3, lot: "", expiry: "" },
+      { id: "tv-3", compartment: "Trousse Verte", name: "Biseptine", bagTarget: 2, bagQty: 2, reserveQty: 4, minStock: 2, lot: "", expiry: "" },
+      { id: "tv-4", compartment: "Trousse Verte", name: "Champs stériles", bagTarget: 2, bagQty: 2, reserveQty: 5, minStock: 2, lot: "", expiry: "" },
+      { id: "tv-5", compartment: "Trousse Verte", name: "Chlorure de sodium 10 ml", bagTarget: 3, bagQty: 3, reserveQty: 15, minStock: 5, lot: "", expiry: "" },
+      { id: "tv-6", compartment: "Trousse Verte", name: "Filet tubulaire", bagTarget: 1, bagQty: 1, reserveQty: 3, minStock: 1, lot: "", expiry: "" },
+      { id: "tv-7", compartment: "Trousse Verte", name: "Compresses (Trousse Verte)", bagTarget: 5, bagQty: 5, reserveQty: 25, minStock: 10, lot: "", expiry: "" },
+      { id: "tv-8", compartment: "Trousse Verte", name: "Pansements américains (Trousse Verte)", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 2, lot: "", expiry: "" },
+      { id: "tv-9", compartment: "Trousse Verte", name: "Poche de froid", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 2, lot: "", expiry: "" },
+      { id: "tv-10", compartment: "Trousse Verte", name: "Sparadrap", bagTarget: 1, bagQty: 1, reserveQty: 4, minStock: 2, lot: "", expiry: "" },
+      { id: "tv-11", compartment: "Trousse Verte", name: "Écharpes", bagTarget: 2, bagQty: 2, reserveQty: 4, minStock: 2, lot: "", expiry: "" },
+
+      // TROUSSE ROUGE (11)
+      { id: "tr-1", compartment: "Trousse Rouge", name: "Bande substance hémostatique", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "tr-2", compartment: "Trousse Rouge", name: "Bandes extensibles 7 cm (Trousse Rouge)", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 2, lot: "", expiry: "" },
+      { id: "tr-3", compartment: "Trousse Rouge", name: "Couverture de survie", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 3, lot: "", expiry: "" },
+      { id: "tr-4", compartment: "Trousse Rouge", name: "Garrots tourniquets", bagTarget: 2, bagQty: 2, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "tr-5", compartment: "Trousse Rouge", name: "Marqueur", bagTarget: 1, bagQty: 1, reserveQty: 3, minStock: 1, lot: "", expiry: "" },
+      { id: "tr-6", compartment: "Trousse Rouge", name: "Pansements compressifs", bagTarget: 2, bagQty: 2, reserveQty: 4, minStock: 2, lot: "", expiry: "" },
+      { id: "tr-7", compartment: "Trousse Rouge", name: "Compresses (Trousse Rouge)", bagTarget: 2, bagQty: 2, reserveQty: 15, minStock: 5, lot: "", expiry: "" },
+      { id: "tr-8", compartment: "Trousse Rouge", name: "Pansements américains (Trousse Rouge)", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 2, lot: "", expiry: "" },
+      { id: "tr-9", compartment: "Trousse Rouge", name: "Scotch de combat", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "tr-10", compartment: "Trousse Rouge", name: "Brûle Stop 10x10", bagTarget: 1, bagQty: 1, reserveQty: 3, minStock: 1, lot: "", expiry: "" },
+      { id: "tr-11", compartment: "Trousse Rouge", name: "Brûle Stop 20x20", bagTarget: 1, bagQty: 1, reserveQty: 3, minStock: 1, lot: "", expiry: "" },
+
+      // POCHE SAC DE SECOURS (3)
+      { id: "ps-1", compartment: "Poche Sac de Secours", name: "Collier adulte", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "ps-2", compartment: "Poche Sac de Secours", name: "Collier pédiatrique", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "ps-3", compartment: "Poche Sac de Secours", name: "Sac de section de membre", bagTarget: 2, bagQty: 2, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+
+      // TROUSSE NOIRE (10)
+      { id: "tn-1", compartment: "Trousse Noire", name: "Lecteur de glycémie", bagTarget: 1, bagQty: 1, reserveQty: 1, minStock: 1, lot: "", expiry: "" },
+      { id: "tn-2", compartment: "Trousse Noire", name: "Boîte de bandelettes glycémie", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "tn-3", compartment: "Trousse Noire", name: "Lancettes", bagTarget: 5, bagQty: 5, reserveQty: 25, minStock: 10, lot: "", expiry: "" },
+      { id: "tn-4", compartment: "Trousse Noire", name: "Chlorure de sodium 10 ml (Trousse Noire)", bagTarget: 1, bagQty: 1, reserveQty: 10, minStock: 3, lot: "", expiry: "" },
+      { id: "tn-5", compartment: "Trousse Noire", name: "Compresses (Trousse Noire)", bagTarget: 2, bagQty: 2, reserveQty: 15, minStock: 5, lot: "", expiry: "" },
+      { id: "tn-6", compartment: "Trousse Noire", name: "Thermomètre", bagTarget: 1, bagQty: 1, reserveQty: 1, minStock: 1, lot: "", expiry: "" },
+      { id: "tn-7", compartment: "Trousse Noire", name: "Protections de thermomètre", bagTarget: 5, bagQty: 5, reserveQty: 20, minStock: 10, lot: "", expiry: "" },
+      { id: "tn-8", compartment: "Trousse Noire", name: "Sac DASRI", bagTarget: 1, bagQty: 1, reserveQty: 5, minStock: 2, lot: "", expiry: "" },
+      { id: "tn-9", compartment: "Trousse Noire", name: "Stylo pupilles", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "tn-10", compartment: "Trousse Noire", name: "Ciseaux Jesco", bagTarget: 1, bagQty: 1, reserveQty: 1, minStock: 1, lot: "", expiry: "" },
+
+      // TROUSSE ORANGE (1)
+      { id: "to-1", compartment: "Trousse Orange", name: "Kit AELB (Accouchement)", bagTarget: 1, bagQty: 1, reserveQty: 1, minStock: 1, lot: "", expiry: "" },
+
+      // SAC OXYGENE (4)
+      { id: "so-1", compartment: "Sac Oxygène", name: "Bouteille d'oxygène médical", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "so-2", compartment: "Sac Oxygène", name: "Aspirateur de mucosités manuel", bagTarget: 1, bagQty: 1, reserveQty: 1, minStock: 1, lot: "", expiry: "" },
+      { id: "so-3", compartment: "Sac Oxygène", name: "BAVU Adulte (2 masques + 1 filtre)", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "so-4", compartment: "Sac Oxygène", name: "BAVU Pédiatrique (2 masques + 1 filtre)", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+
+      // TROUSSE BLEUE (6)
+      { id: "tb-1", compartment: "Trousse Bleue", name: "MHC Adulte (Masque Haute Concentration)", bagTarget: 2, bagQty: 2, reserveQty: 5, minStock: 2, lot: "", expiry: "" },
+      { id: "tb-2", compartment: "Trousse Bleue", name: "MHC Pédiatrique", bagTarget: 1, bagQty: 1, reserveQty: 3, minStock: 1, lot: "", expiry: "" },
+      { id: "tb-3", compartment: "Trousse Bleue", name: "Lunettes O2", bagTarget: 1, bagQty: 1, reserveQty: 4, minStock: 2, lot: "", expiry: "" },
+      { id: "tb-4", compartment: "Trousse Bleue", name: "Canules de Guedel (0, 1, 2, 3, 4)", bagTarget: 1, bagQty: 1, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "tb-5", compartment: "Trousse Bleue", name: "Champ stérile (Trousse Bleue)", bagTarget: 1, bagQty: 1, reserveQty: 3, minStock: 1, lot: "", expiry: "" },
+      { id: "tb-6", compartment: "Trousse Bleue", name: "Filtres antibactériens", bagTarget: 2, bagQty: 2, reserveQty: 6, minStock: 2, lot: "", expiry: "" },
+
+      // DSA (4)
+      { id: "dsa-1", compartment: "DSA", name: "Électrodes Adulte DSA", bagTarget: 2, bagQty: 2, reserveQty: 2, minStock: 1, lot: "", expiry: "" },
+      { id: "dsa-2", compartment: "DSA", name: "Électrodes Pédiatrique DSA", bagTarget: 1, bagQty: 1, reserveQty: 1, minStock: 1, lot: "", expiry: "" },
+      { id: "dsa-3", compartment: "DSA", name: "Ciseau DSA", bagTarget: 1, bagQty: 1, reserveQty: 1, minStock: 1, lot: "", expiry: "" },
+      { id: "dsa-4", compartment: "DSA", name: "Rasoir jetable DSA", bagTarget: 1, bagQty: 1, reserveQty: 5, minStock: 2, lot: "", expiry: "" }
+    ];
+
+    const COMPARTMENT_STYLES = {
+      "Trousse Verte": { badge: "bg-emerald-100 text-emerald-800 border-emerald-200", header: "bg-emerald-600 text-white" },
+      "Trousse Rouge": { badge: "bg-red-100 text-red-800 border-red-200", header: "bg-red-600 text-white" },
+      "Poche Sac de Secours": { badge: "bg-slate-200 text-slate-800 border-slate-300", header: "bg-slate-800 text-white" },
+      "Trousse Noire": { badge: "bg-zinc-200 text-zinc-900 border-zinc-300", header: "bg-zinc-900 text-white" },
+      "Trousse Orange": { badge: "bg-orange-100 text-orange-800 border-orange-200", header: "bg-orange-500 text-white" },
+      "Sac Oxygène": { badge: "bg-sky-100 text-sky-800 border-sky-200", header: "bg-sky-600 text-white" },
+      "Trousse Bleue": { badge: "bg-blue-100 text-blue-800 border-blue-200", header: "bg-blue-600 text-white" },
+      "DSA": { badge: "bg-amber-100 text-amber-800 border-amber-200", header: "bg-amber-500 text-slate-900" }
+    };
+
+    let state = {
+      items: JSON.parse(JSON.stringify(INITIAL_ITEMS)),
+      movements: [],
+      lastVerif: null,
+      adminPin: "1818",
+      publicUrl: window.location.href.split("?")[0]
+    };
+
+    let checkedIds = new Set();
+    let isAdmin = false;
+    let quickFilter = "all";
+    let isCloudReady = false;
+
+    function updateSyncBadge(online) {
+      const badge = document.getElementById("sync-badge");
+      if (online) {
+        badge.className = "inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Synchro Directe`;
+      } else {
+        badge.className = "inline-flex items-center gap-1.5 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30";
+        badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> Mode Hors-ligne`;
+      }
+    }
+
+    async function persistState() {
+      localStorage.setItem("pharmasecours_romagnat_v2", JSON.stringify(state));
+      if (isCloudReady) {
+        try {
+          await setDoc(STATE_DOC_REF, state);
+        } catch (err) {
+          console.error("Erreur synchro Firestore:", err);
+        }
+      }
+      renderAll();
+    }
+
+    // AUTH & REALTIME FIRESTORE LISTENER
+    signInAnonymously(auth).catch((e) => console.warn("Auth anonyme:", e));
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        onSnapshot(STATE_DOC_REF, async (snap) => {
+          isCloudReady = true;
+          updateSyncBadge(true);
+          if (snap.exists()) {
+            const remote = snap.data();
+            if (remote && Array.isArray(remote.items)) {
+              state = {
+                items: remote.items,
+                movements: remote.movements || [],
+                lastVerif: remote.lastVerif || null,
+                adminPin: remote.adminPin || "1818",
+                publicUrl: remote.publicUrl || state.publicUrl
+              };
+              renderAll();
+            }
+          } else {
+            await setDoc(STATE_DOC_REF, state);
+          }
+        }, (err) => {
+          console.warn("Firestore listener error:", err);
+          updateSyncBadge(false);
+        });
+      }
+    });
+
+    // LOAD LOCAL CACHE FIRST FOR INSTANT RENDER
+    const cached = localStorage.getItem("pharmasecours_romagnat_v2");
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (parsed.items) state = parsed;
+      } catch (e) {}
+    }
+
+    // ROLE & PIN MANAGEMENT
+    window.toggleAdminMode = function () {
+      if (isAdmin) {
+        isAdmin = false;
+        applyRoleUI();
+      } else {
+        document.getElementById("pin-input").value = "";
+        document.getElementById("pin-modal").classList.remove("hidden");
+        document.getElementById("pin-modal").classList.add("flex");
+        setTimeout(() => document.getElementById("pin-input").focus(), 50);
+      }
+    };
+
+    window.closePinModal = function () {
+      document.getElementById("pin-modal").classList.add("hidden");
+      document.getElementById("pin-modal").classList.remove("flex");
+    };
+
+    window.verifyPin = function () {
+      const val = document.getElementById("pin-input").value.trim();
+      if (val === (state.adminPin || "1818")) {
+        isAdmin = true;
+        closePinModal();
+        applyRoleUI();
+      } else {
+        alert("Code PIN incorrect.");
+      }
+    };
+
+    function applyRoleUI() {
+      const btn = document.getElementById("btn-role-toggle");
+      const label = document.getElementById("role-label");
+      const icon = document.getElementById("role-icon");
+
+      document.querySelectorAll(".admin-only").forEach((el) => {
+        if (isAdmin) el.classList.remove("hidden");
+        else el.classList.add("hidden");
+      });
+
+      if (isAdmin) {
+        btn.className = "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition bg-red-600 hover:bg-red-700 text-white shadow-sm";
+        label.textContent = "Mode Responsable (Verrouiller)";
+        icon.setAttribute("data-lucide", "unlock");
+      } else {
+        btn.className = "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700";
+        label.textContent = "Mode Pompier";
+        icon.setAttribute("data-lucide", "shield");
+        // Redirect if currently on an admin-only tab
+        const activeTab = document.querySelector(".tab-btn.border-red-500")?.id;
+        if (activeTab === "tab-mouvements" || activeTab === "tab-commandes") {
+          switchTab("verif");
+        }
+      }
+      renderAll();
+    }
+
+    // NAVIGATION
+    window.switchTab = function (tabId) {
+      ["verif", "stocks", "mouvements", "commandes", "qrcode"].forEach((id) => {
+        const view = document.getElementById(`view-${id}`);
+        const tab = document.getElementById(`tab-${id}`);
+        if (id === tabId) {
+          view.classList.remove("hidden");
+          tab.classList.remove("border-transparent", "text-slate-400");
+          tab.classList.add("border-red-500", "text-white");
+        } else {
+          view.classList.add("hidden");
+          tab.classList.add("border-transparent", "text-slate-400");
+          tab.classList.remove("border-red-500", "text-white");
+        }
+      });
+      if (tabId === "qrcode") generateQRCode();
+      lucide.createIcons();
+    };
+
+    // EXPIRY HELPER
+    function getExpiryStatus(expiryStr) {
+      if (!expiryStr) return "ok";
+      const now = new Date();
+      const exp = new Date(expiryStr);
+      const diffDays = (exp - now) / (1000 * 60 * 60 * 24);
+      if (diffDays <= 30) return "critical";
+      if (diffDays <= 90) return "warning";
+      return "ok";
+    }
+
+    // VERIFICATION CHECKLIST
+    function renderChecklist() {
+      const container = document.getElementById("verif-container");
+      const compartments = Object.keys(COMPARTMENT_STYLES);
+
+      document.getElementById("last-verif-info").textContent = state.lastVerif
+        ? `Dernière vérification enregistrée : Le ${state.lastVerif.date} par ${state.lastVerif.agent}`
+        : "Dernière vérification enregistrée : Aucune";
+
+      container.innerHTML = compartments.map((comp) => {
+        const items = state.items.filter((i) => i.compartment === comp);
+        if (!items.length) return "";
+        const style = COMPARTMENT_STYLES[comp];
+        const compCheckedCount = items.filter((i) => checkedIds.has(i.id)).length;
+
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="${style.header} px-4 py-2.5 flex items-center justify-between">
+              <span class="font-extrabold text-xs uppercase tracking-wider">${comp}</span>
+              <span class="text-xs font-bold opacity-90">${compCheckedCount} / ${items.length}</span>
+            </div>
+            <div class="divide-y divide-slate-100">
+              ${items.map((item) => {
+                const isChecked = checkedIds.has(item.id);
+                const missingInBag = item.bagQty < item.bagTarget;
+                return `
+                  <div class="px-4 py-3 flex flex-wrap items-center justify-between gap-3 ${isChecked ? "bg-emerald-50/40" : ""}">
+                    <label class="flex items-center gap-3 cursor-pointer flex-1 min-w-[200px]">
+                      <input type="checkbox" ${isChecked ? "checked" : ""} onchange="toggleCheckItem('${item.id}')" class="w-5 h-5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer" />
+                      <div>
+                        <p class="text-sm font-semibold ${isChecked ? "line-through text-slate-400" : "text-slate-800"}">${item.name}</p>
+                        <p class="text-xs ${missingInBag ? "text-red-600 font-bold" : "text-slate-500"}">
+                          Dans le sac : ${item.bagQty} / ${item.bagTarget} ${missingInBag ? "(Manquant !)" : ""}
+                        </p>
+                      </div>
                     </label>
-                    <button onclick="lockAdminMode()" class="px-2.5 py-1 rounded-lg bg-amber-600 text-white font-bold hover:bg-amber-700 transition">
-                        Verrouiller
-                    </button>
-                </div>
-            </div>
-
-            <!-- BARRE DE NAVIGATION -->
-            <nav class="flex overflow-x-auto no-scrollbar -mb-px space-x-2 sm:space-x-6 pt-1" aria-label="Navigation principale">
-                <button onclick="switchTab('checklist')" id="nav-checklist" class="tab-btn flex items-center gap-2 py-3 px-2 text-sm font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 whitespace-nowrap transition">
-                    <i data-lucide="clipboard-check" class="w-4 h-4"></i>
-                    <span>Vérif. Lot Secours</span>
-                    <span id="badge-checklist" class="px-1.5 py-0.5 text-xs rounded-full bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200">0/0</span>
-                </button>
-                <button onclick="switchTab('inventory')" id="nav-inventory" class="tab-btn tab-active flex items-center gap-2 py-3 px-2 text-sm font-semibold whitespace-nowrap transition">
-                    <i data-lucide="package" class="w-4 h-4"></i>
-                    <span id="navInventoryLabel">Armement & Sorties</span>
-                </button>
-                <button onclick="switchTab('movements')" id="nav-movements" class="tab-btn admin-only hidden flex items-center gap-2 py-3 px-2 text-sm font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 whitespace-nowrap transition">
-                    <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
-                    <span>Historique Mouvements</span>
-                </button>
-                <button onclick="switchTab('orders')" id="nav-orders" class="tab-btn admin-only hidden flex items-center gap-2 py-3 px-2 text-sm font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 whitespace-nowrap transition">
-                    <i data-lucide="shopping-cart" class="w-4 h-4"></i>
-                    <span>Commandes</span>
-                    <span id="badge-orders" class="px-1.5 py-0.5 text-xs rounded-full bg-fire-600 text-white font-bold">0</span>
-                </button>
-                <button onclick="switchTab('qrcode')" id="nav-qrcode" class="tab-btn flex items-center gap-2 py-3 px-2 text-sm font-semibold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 whitespace-nowrap transition">
-                    <i data-lucide="qr-code" class="w-4 h-4"></i>
-                    <span>QR Code Camion</span>
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- CONTENU PRINCIPAL -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- ========================================================= -->
-        <!-- VUE 1 : VÉRIFICATION LOT DE SECOURS (CHECK-LIST TERRAIN)  -->
-        <!-- ========================================================= -->
-        <section id="view-checklist" class="hidden space-y-6">
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="clipboard-check" class="w-5 h-5 text-fire-600"></i>
-                            Vérification Lot de secours &laquo; Romagnat &raquo; (Sac Bagheera)
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-1" id="lastCheckInfo">
-                            Dernière vérification validée : Aucune enregistrée
-                        </p>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="resetChecklistProgress()" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
-                            Tout décocher
+                    <div class="flex items-center gap-2">
+                      ${missingInBag ? `
+                        <button onclick="rearmFromReserve('${item.id}')" class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg">
+                          Réarmer (+${item.bagTarget - item.bagQty})
                         </button>
-                        <button onclick="checkAllChecklistItems()" class="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 transition">
-                            <i data-lucide="check-check" class="w-3.5 h-3.5"></i>
-                            Tout cocher
-                        </button>
+                      ` : ""}
+                      <button onclick="quickBagUse('${item.id}')" class="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold rounded-lg">
+                        -1 Inter
+                      </button>
                     </div>
-                </div>
-
-                <!-- Barre de progression globale -->
-                <div>
-                    <div class="flex justify-between text-xs font-bold mb-1.5">
-                        <span class="text-slate-600 dark:text-slate-300">Progression du contrôle par trousse</span>
-                        <span id="checklistProgressText" class="text-fire-600 dark:text-fire-400">0 % (0/0)</span>
-                    </div>
-                    <div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                        <div id="checklistProgressBar" class="h-full bg-emerald-500 transition-all duration-300 rounded-full" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <!-- Filtre rapide par Trousse / Compartiment -->
-                <div id="checklistPouchTabs" class="flex overflow-x-auto no-scrollbar gap-2 pt-1"></div>
-            </div>
-
-            <!-- Liste groupée par trousse -->
-            <div id="checklistContainer" class="space-y-4"></div>
-
-            <!-- Validation officielle de la vérification -->
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-                <h3 class="text-sm font-extrabold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-                    Clôturer & Enregistrer le contrôle
-                </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Nom / Matricule du Pompier vérificateur *</label>
-                        <input type="text" id="checkerNameInput" placeholder="Ex: Sap. Martin / Sgt. Dupont" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Observations (scellé, pression O2, batterie DSA...)</label>
-                        <input type="text" id="checkerNoteInput" placeholder="Ex: O2 à 200 bars, sac scellé OK" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-emerald-500">
-                    </div>
-                </div>
-                <button onclick="validateCompleteChecklist()" class="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold text-sm shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 transition">
-                    <i data-lucide="badge-check" class="w-5 h-5"></i>
-                    Valider la vérification du Lot de secours Romagnat
-                </button>
-            </div>
-        </section>
-
-        <!-- ========================================================= -->
-        <!-- VUE 2 : INVENTAIRE & STOCKS PAR TROUSSE                   -->
-        <!-- ========================================================= -->
-        <section id="view-inventory" class="space-y-6">
-            <!-- Cartes KPI (Stock bas et Péremptions visibles uniquement en Mode Responsable) -->
-            <div id="kpiGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div onclick="setQuickFilter('all')" class="cursor-pointer bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-slate-300 dark:hover:border-slate-700 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Lot de secours Romagnat</span>
-                        <div class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                            <i data-lucide="layers" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                    <p id="kpi-total" class="text-2xl sm:text-3xl font-extrabold mt-2 text-slate-900 dark:text-white">0</p>
-                    <p class="text-xs text-slate-500 mt-1">Références dans le sac</p>
-                </div>
-
-                <div onclick="setQuickFilter('lot')" class="cursor-pointer bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-blue-300 dark:hover:border-blue-800 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">État du Sac</span>
-                        <div class="p-2 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400">
-                            <i data-lucide="briefcase-medical" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                    <p id="kpi-incomplete" class="text-2xl sm:text-3xl font-extrabold mt-2 text-blue-600 dark:text-blue-400">0</p>
-                    <p class="text-xs text-slate-500 mt-1">Articles manquants à réarmer</p>
-                </div>
-
-                <div onclick="setQuickFilter('low')" class="admin-only hidden cursor-pointer bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-fire-300 dark:hover:border-fire-800 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-fire-600 dark:text-fire-400">Stock Bas</span>
-                        <div class="p-2 rounded-xl bg-fire-50 dark:bg-fire-950/60 text-fire-600 dark:text-fire-400">
-                            <i data-lucide="alert-triangle" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                    <p id="kpi-low" class="text-2xl sm:text-3xl font-extrabold mt-2 text-fire-600 dark:text-fire-400">0</p>
-                    <p class="text-xs text-slate-500 mt-1">Sous seuil d'alerte</p>
-                </div>
-
-                <div onclick="setQuickFilter('expiring')" class="admin-only hidden cursor-pointer bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-amber-300 dark:hover:border-amber-800 transition">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400">Péremptions</span>
-                        <div class="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400">
-                            <i data-lucide="calendar-clock" class="w-4 h-4"></i>
-                        </div>
-                    </div>
-                    <p id="kpi-expiring" class="text-2xl sm:text-3xl font-extrabold mt-2 text-amber-600 dark:text-amber-400">0</p>
-                    <p class="text-xs text-slate-500 mt-1">&lt; 3 mois ou périmés</p>
-                </div>
-            </div>
-
-            <!-- Bandeau Dernière Vérification sur l'accueil -->
-            <div class="bg-white dark:bg-slate-900 px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
-                <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600 shrink-0"></i>
-                    <span id="homeLastCheckBanner">Dernier contrôle Lot de secours Romagnat : Aucun enregistré</span>
-                </div>
-                <button onclick="switchTab('checklist')" class="font-bold text-fire-600 dark:text-fire-400 hover:underline">
-                    Ouvrir la fiche de vérification &rarr;
-                </button>
-            </div>
-
-            <!-- Barre de Recherche et Filtres par Trousse Bagheera -->
-            <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-                <div class="flex flex-col md:flex-row gap-3">
-                    <div class="relative flex-1">
-                        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                        <input type="text" id="searchInput" oninput="renderInventory()" placeholder="Rechercher un matériel (ex: Biseptine, Garrot, BAVU, Électrode...)" class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-fire-500 transition">
-                    </div>
-
-                    <select id="pouchFilter" onchange="renderInventory()" class="px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-semibold focus:outline-none focus:ring-2 focus:ring-fire-500">
-                        <option value="ALL">Toutes les trousses (Bagheera)</option>
-                        <option value="Trousse Verte">Trousse Verte (Soins / Plaies)</option>
-                        <option value="Trousse Rouge">Trousse Rouge (Hémorragie / Urgence)</option>
-                        <option value="Poche Sac de Secours">Poche Sac de Secours (Immobilisation)</option>
-                        <option value="Trousse Noire">Trousse Noire (Bilan / Diagnostic)</option>
-                        <option value="Trousse Orange">Trousse Orange (Kit AELB)</option>
-                        <option value="Sac Oxygène">Sac Oxygène (O2 / Ventilation)</option>
-                        <option value="Trousse Bleue">Trousse Bleue (Voies Aériennes)</option>
-                        <option value="DSA">DSA (Défibrillateur)</option>
-                    </select>
-                </div>
-
-                <!-- Filtres rapides -->
-                <div class="flex flex-wrap items-center gap-2 pt-1">
-                    <span class="text-xs font-medium text-slate-500 mr-1">Filtrer :</span>
-                    <button onclick="setQuickFilter('all')" id="qf-all" class="qf-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 transition">
-                        Tout l'armement
-                    </button>
-                    <button onclick="setQuickFilter('lot')" id="qf-lot" class="qf-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 transition">
-                        Sac incomplet à réarmer
-                    </button>
-                    <button onclick="setQuickFilter('low')" id="qf-low" class="admin-only hidden qf-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 transition">
-                        Stock Bas
-                    </button>
-                    <button onclick="setQuickFilter('expiring')" id="qf-expiring" class="admin-only hidden qf-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 transition">
-                        Péremptions (&lt; 3 mois)
-                    </button>
-                </div>
-            </div>
-
-            <!-- Liste des articles -->
-            <div id="inventoryList" class="grid grid-cols-1 gap-3"></div>
-
-            <!-- État vide -->
-            <div id="emptyInventoryState" class="hidden text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-                <i data-lucide="package-open" class="w-10 h-10 mx-auto text-slate-400 mb-2"></i>
-                <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Aucun article trouvé</p>
-                <p class="text-xs text-slate-500 mt-1">Modifiez votre filtre ou votre recherche.</p>
-            </div>
-        </section>
-
-        <!-- ========================================================= -->
-        <!-- VUE 3 : MOUVEMENTS (MODE RESPONSABLE UNIQUEMENT)          -->
-        <!-- ========================================================= -->
-        <section id="view-movements" class="hidden space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Formulaire d'enregistrement -->
-                <div class="lg:col-span-1 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm h-fit">
-                    <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-4">
-                        <i data-lucide="pen-tool" class="w-4 h-4 text-fire-600"></i>
-                        Déclarer un mouvement
-                    </h2>
-                    <form id="movementForm" onsubmit="handleMovementSubmit(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Type d'opération</label>
-                            <select id="movType" onchange="toggleMovementFields()" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-medium">
-                                <option value="OUT_INTER">Sortie Intervention (Prélèvement)</option>
-                                <option value="REARM">Réarmement Sac (Réserve &rarr; Sac)</option>
-                                <option value="OUT_EXPIRED">Sortie Péremption / Destruction</option>
-                                <option value="IN_RESTOCK">Entrée Réserve (Livraison Commande)</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Article concerné</label>
-                            <select id="movItem" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                            </select>
-                        </div>
-
-                        <div id="movSourceBox">
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Emplacement impacté</label>
-                            <select id="movLocation" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                                <option value="LOT">Sac / Lot de secours</option>
-                                <option value="RESERVE">Réserve Pharmacie Caserne</option>
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Quantité</label>
-                                <input type="number" id="movQty" min="1" value="1" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Intervenant</label>
-                                <input type="text" id="movOperator" placeholder="Ex: Sap. Martin" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                            </div>
-                        </div>
-
-                        <div id="movRestockFields" class="hidden space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
-                            <p class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Mise à jour traçabilité (optionnel)</p>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-xs text-slate-500 mb-1">Nouveau N° Lot</label>
-                                    <input type="text" id="movNewBatch" placeholder="Ex: LOT-2026B" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                                </div>
-                                <div>
-                                    <label class="block text-xs text-slate-500 mb-1">Nouvelle Péremption</label>
-                                    <input type="date" id="movNewExpiry" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Motif / N° Intervention</label>
-                            <input type="text" id="movNote" placeholder="Ex: Inter #412 - Malaise" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                        </div>
-
-                        <button type="submit" class="w-full py-3 px-4 rounded-xl bg-fire-600 hover:bg-fire-700 active:scale-[0.99] text-white font-bold text-sm shadow-sm shadow-fire-600/20 transition">
-                            Enregistrer le mouvement
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Journal des mouvements -->
-                <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <div class="flex items-center justify-between mb-4">
-                        <div>
-                            <h2 class="text-base font-bold text-slate-900 dark:text-white">Journal des entrées & sorties</h2>
-                            <p class="text-xs text-slate-500">Traçabilité complète des prélèvements, réarmements et réceptions</p>
-                        </div>
-                        <button onclick="exportMovementsCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
-                            Export CSV
-                        </button>
-                    </div>
-                    <div id="movementsList" class="space-y-2.5 max-h-[620px] overflow-y-auto pr-1"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ========================================================= -->
-        <!-- VUE 4 : BON DE COMMANDE & PARAMÈTRES PIN (RESPONSABLE)    -->
-        <!-- ========================================================= -->
-        <section id="view-orders" class="hidden space-y-6">
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                        <i data-lucide="shopping-cart" class="w-5 h-5 text-fire-600"></i>
-                        Préparation de Commande Pharmacie
-                    </h2>
-                    <p class="text-xs text-slate-500 mt-0.5">
-                        Articles sous le seuil d'alerte ou périmant dans moins de 3 mois.
-                    </p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="copyOrderToClipboard()" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 text-white transition">
-                        <i data-lucide="copy" class="w-4 h-4"></i>
-                        Copier la liste
-                    </button>
-                    <button onclick="exportOrderCSV()" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-                        Export CSV
-                    </button>
-                </div>
-            </div>
-
-            <div id="orderListContainer" class="space-y-3"></div>
-
-            <!-- Paramétrage Code PIN Responsable -->
-            <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm max-w-lg space-y-3">
-                <h3 class="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                    <i data-lucide="key-round" class="w-4 h-4 text-amber-500"></i>
-                    Sécurité : Modifier le Code PIN Responsable
-                </h3>
-                <p class="text-xs text-slate-500">
-                    Code actuel par défaut : <strong>1818</strong>. Ce code protège la modification des stocks de réserve, des seuils et des commandes.
-                </p>
-                <form onsubmit="updateAdminPin(event)" class="flex gap-2">
-                    <input type="text" id="newPinInput" pattern="[0-9]{4,6}" maxlength="6" placeholder="Nouveau PIN (4 à 6 chiffres)" required class="flex-1 px-3.5 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                    <button type="submit" class="px-4 py-2 text-xs font-bold rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 transition">
-                        Changer PIN
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <!-- ========================================================= -->
-        <!-- VUE 5 : QR CODE & PARTAGE MULTI-APPAREILS CAMION          -->
-        <!-- ========================================================= -->
-        <section id="view-qrcode" class="hidden space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                
-                <!-- Colonne Gauche : Configuration URL Publique & Actions -->
-                <div class="lg:col-span-5 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                            <i data-lucide="qr-code" class="w-5 h-5 text-fire-600"></i>
-                            Partage & QR Code Camion
-                        </h2>
-                        <p class="text-xs text-slate-500 mt-1">
-                            Configurez l'adresse web publique de l'application puis imprimez la fiche plastifiable pour le véhicule.
-                        </p>
-                    </div>
-
-                    <!-- Alerte détection environnement local / privé -->
-                    <div id="urlEnvAlertBox" class="p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-800 text-xs text-amber-900 dark:text-amber-200 space-y-2">
-                        <p class="font-extrabold flex items-center gap-1.5 text-amber-800 dark:text-amber-300">
-                            <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0"></i>
-                            Pourquoi le scan téléphone ne marche pas encore ?
-                        </p>
-                        <p>
-                            Vous êtes actuellement sur un aperçu privé ou un fichier local. Pour qu'un téléphone externe puisse ouvrir l'application au scan du QR Code, il faut d'abord héberger ce fichier HTML en ligne (gratuit en 1 minute) :
-                        </p>
-                        <ol class="list-decimal pl-4 space-y-1 font-medium">
-                            <li>Enregistrez le fichier <strong>.html</strong> sur votre ordinateur (renommé <code>index.html</code>).</li>
-                            <li>Déposez-le gratuitement sur <strong>app.netlify.com/drop</strong> (glisser-déposer).</li>
-                            <li>Copiez le lien public obtenu (ex: <code>https://romagnat-secours.netlify.app</code>) et collez-le ci-dessous.</li>
-                        </ol>
-                    </div>
-
-                    <!-- Champ URL Publique d'hébergement -->
-                    <div class="space-y-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">
-                            URL Publique d'hébergement (HTTPS) :
-                        </label>
-                        <div class="flex gap-2">
-                            <input type="url" id="publicBaseUrlInput" oninput="generateTruckQRCode()" placeholder="https://votre-lien-public.netlify.app" class="flex-1 px-3 py-2 text-xs font-mono rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-fire-500">
-                            <button onclick="savePublicBaseUrl()" class="px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition shrink-0">
-                                Enregistrer
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Choix de la page d'ouverture au scan -->
-                    <div class="space-y-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Page ouverte lors du scan :</label>
-                        <select id="qrTargetMode" onchange="generateTruckQRCode()" class="w-full px-3.5 py-2.5 text-sm font-medium rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                            <option value="verif" selected>Vérification Lot de secours Romagnat (Recommandé)</option>
-                            <option value="stock">Armement & Déclaration rapide de sortie</option>
-                        </select>
-                    </div>
-
-                    <!-- Lien complet généré dans le QR Code -->
-                    <div class="space-y-2">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400">Lien complet encodé dans le QR Code :</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="shareUrlInput" readonly class="flex-1 px-3 py-2 text-xs font-mono rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                            <button onclick="copyShareUrl()" class="px-3 py-2 text-xs font-bold rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-700 text-white transition shrink-0">
-                                Copier
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Boutons Test & Impression -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
-                        <button onclick="testQrDestination()" class="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs font-bold rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition">
-                            <i data-lucide="external-link" class="w-4 h-4"></i>
-                            Tester l'ouverture
-                        </button>
-                        <button onclick="window.print()" class="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs font-bold rounded-xl bg-fire-600 hover:bg-fire-700 text-white shadow-md shadow-fire-600/20 transition">
-                            <i data-lucide="printer" class="w-4 h-4"></i>
-                            Imprimer la fiche
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Colonne Droite : Aperçu Fiche Plastifiable à Imprimer -->
-                <div class="lg:col-span-7">
-                    <div id="printableQrSheet" class="bg-white text-slate-900 p-6 sm:p-8 rounded-2xl border-2 border-slate-300 shadow-lg max-w-lg mx-auto text-center space-y-6">
-                        <!-- En-tête Fiche Camion -->
-                        <div class="border-b-2 border-fire-600 pb-4 space-y-1">
-                            <div class="inline-flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-fire-600 text-white text-xs font-extrabold uppercase tracking-wider">
-                                Caserne &bull; Pharmacie & Secours
-                            </div>
-                            <h3 class="text-xl sm:text-2xl font-black uppercase tracking-tight text-slate-900 pt-1">
-                                VÉRIFICATION & SORTIE<br>LOT DE SECOURS &laquo; ROMAGNAT &raquo;
-                            </h3>
-                            <p class="text-xs font-semibold text-slate-500">
-                                À laisser dans le véhicule / pochette du sac Bagheera
-                            </p>
-                        </div>
-
-                        <!-- Zone QR Code Centrée -->
-                        <div class="flex flex-col items-center justify-center py-2">
-                            <div id="qrcodeCanvasBox" class="p-4 bg-white border-4 border-slate-900 rounded-2xl inline-block shadow-sm"></div>
-                            <p class="text-xs font-bold text-slate-600 mt-3 uppercase tracking-wider">
-                                Scannez avec l'appareil photo de votre téléphone
-                            </p>
-                        </div>
-
-                        <!-- Consignes équipage -->
-                        <div class="bg-slate-100 rounded-xl p-4 text-left space-y-2 border border-slate-200">
-                            <p class="text-xs font-extrabold uppercase text-slate-800">Procédure équipage :</p>
-                            <ul class="text-xs text-slate-700 space-y-1.5 font-medium">
-                                <li class="flex items-start gap-2">
-                                    <span class="font-black text-fire-600">1.</span>
-                                    <span><strong>Au retour d'intervention :</strong> Déclarez le matériel utilisé (<code>-1 Inter</code>) et réarmez depuis la réserve.</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="font-black text-fire-600">2.</span>
-                                    <span><strong>Vérification périodique :</strong> Contrôlez chaque trousse du sac Bagheera et validez avec votre nom.</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="font-black text-fire-600">3.</span>
-                                    <span><strong>Responsable Pharmacie :</strong> Accès administration protégé par Code PIN.</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-    </main>
-
-    <!-- ========================================================= -->
-    <!-- MODALE SAISIE CODE PIN RESPONSABLE                        -->
-    <!-- ========================================================= -->
-    <div id="pinModal" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 space-y-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <div class="p-2 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
-                        <i data-lucide="lock" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-extrabold text-slate-900 dark:text-white">Accès Responsable</h3>
-                        <p class="text-xs text-slate-500">Gestion Pharmacie & Commandes</p>
-                    </div>
-                </div>
-                <button onclick="closePinModal()" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
-            <form onsubmit="verifyPinCode(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5">Entrez le code PIN (défaut : 1818)</label>
-                    <input type="password" id="pinInput" inputmode="numeric" maxlength="6" placeholder="••••" required class="w-full text-center tracking-[0.5em] text-xl font-black px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-amber-500">
-                    <p id="pinError" class="hidden text-xs font-semibold text-fire-600 mt-1.5 text-center">Code PIN incorrect.</p>
-                </div>
-                <div class="flex gap-2">
-                    <button type="button" onclick="closePinModal()" class="flex-1 py-2.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">
-                        Annuler
-                    </button>
-                    <button type="submit" class="flex-1 py-2.5 text-xs font-bold rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-sm">
-                        Déverrouiller
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ========================================================= -->
-    <!-- MODALE AJOUT / ÉDITION ARTICLE (MODE RESPONSABLE)         -->
-    <!-- ========================================================= -->
-    <div id="itemModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800">
-                <h3 id="modalTitle" class="text-base font-bold text-slate-900 dark:text-white">Ajouter un article</h3>
-                <button onclick="closeItemModal()" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-            <form id="itemForm" onsubmit="handleItemSave(event)" class="p-5 space-y-4 max-h-[82vh] overflow-y-auto">
-                <input type="hidden" id="editItemId">
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Désignation du matériel / produit *</label>
-                    <input type="text" id="itemName" required placeholder="Ex: Pansement compressif israélien" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus:ring-2 focus:ring-fire-500">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Trousse / Compartiment *</label>
-                        <select id="itemCategory" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                            <option value="Trousse Verte">Trousse Verte</option>
-                            <option value="Trousse Rouge">Trousse Rouge</option>
-                            <option value="Poche Sac de Secours">Poche Sac de Secours</option>
-                            <option value="Trousse Noire">Trousse Noire</option>
-                            <option value="Trousse Orange">Trousse Orange</option>
-                            <option value="Sac Oxygène">Sac Oxygène</option>
-                            <option value="Trousse Bleue">Trousse Bleue</option>
-                            <option value="DSA">DSA</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Fournisseur habituel</label>
-                        <input type="text" id="itemSupplier" placeholder="Ex: Bagheera / NM Médical" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Dotation Sac *</label>
-                        <input type="number" id="itemLotTarget" min="0" value="1" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Actuel Sac *</label>
-                        <input type="number" id="itemLotCurrent" min="0" value="1" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Réserve Pharma *</label>
-                        <input type="number" id="itemReserve" min="0" value="2" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 font-bold">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Seuil Alerte (Mini) *</label>
-                        <input type="number" id="itemMinThreshold" min="0" value="2" required class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">N° de Lot</label>
-                        <input type="text" id="itemBatch" placeholder="Ex: L2025-88" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1">Péremption (DMP)</label>
-                        <input type="date" id="itemExpiry" class="w-full px-3 py-2.5 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
-                    <button type="button" id="deleteItemBtn" onclick="deleteCurrentItem()" class="hidden px-3.5 py-2 text-xs font-semibold rounded-xl text-fire-600 hover:bg-fire-50 dark:hover:bg-fire-950/50 transition">
-                        Supprimer l'article
-                    </button>
-                    <div class="flex gap-2 ml-auto">
-                        <button type="button" onclick="closeItemModal()" class="px-4 py-2.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
-                            Annuler
-                        </button>
-                        <button type="submit" class="px-5 py-2.5 text-xs font-bold rounded-xl bg-fire-600 hover:bg-fire-700 text-white shadow-sm transition">
-                            Enregistrer
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- NOTIFICATION TOAST -->
-    <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
-
-    <!-- LOGIQUE APPLICATIVE & SYNCHRONISATION TEMPS RÉEL -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // =========================================================
-        // STYLES DES TROUSSES BAGHEERA
-        // =========================================================
-        const POUCH_STYLES = {
-            'Trousse Verte': {
-                badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800',
-                header: 'bg-emerald-600 text-white',
-                dot: 'bg-emerald-500'
-            },
-            'Trousse Rouge': {
-                badge: 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300 border border-red-300 dark:border-red-800',
-                header: 'bg-red-600 text-white',
-                dot: 'bg-red-500'
-            },
-            'Poche Sac de Secours': {
-                badge: 'bg-slate-200 text-slate-800 dark:bg-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700',
-                header: 'bg-slate-700 text-white',
-                dot: 'bg-slate-500'
-            },
-            'Trousse Noire': {
-                badge: 'bg-zinc-900 text-white dark:bg-zinc-800 dark:text-zinc-100 border border-zinc-700',
-                header: 'bg-zinc-900 text-white',
-                dot: 'bg-zinc-800'
-            },
-            'Trousse Orange': {
-                badge: 'bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-300 border border-orange-300 dark:border-orange-800',
-                header: 'bg-orange-600 text-white',
-                dot: 'bg-orange-500'
-            },
-            'Sac Oxygène': {
-                badge: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-950 dark:text-cyan-300 border border-cyan-300 dark:border-cyan-800',
-                header: 'bg-cyan-600 text-white',
-                dot: 'bg-cyan-500'
-            },
-            'Trousse Bleue': {
-                badge: 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300 border border-blue-300 dark:border-blue-800',
-                header: 'bg-blue-600 text-white',
-                dot: 'bg-blue-500'
-            },
-            'DSA': {
-                badge: 'bg-yellow-100 text-yellow-900 dark:bg-yellow-950 dark:text-yellow-300 border border-yellow-300 dark:border-yellow-800',
-                header: 'bg-amber-500 text-slate-950',
-                dot: 'bg-amber-500'
-            }
-        };
-
-        const POUCH_ORDER = [
-            'Trousse Verte',
-            'Trousse Rouge',
-            'Poche Sac de Secours',
-            'Trousse Noire',
-            'Trousse Orange',
-            'Sac Oxygène',
-            'Trousse Bleue',
-            'DSA'
-        ];
-
-        function futureDate(monthsAhead) {
-            const d = new Date();
-            d.setMonth(d.getMonth() + monthsAhead);
-            return d.toISOString().split('T')[0];
-        }
-
-        // =========================================================
-        // ARMEMENT OFFICIEL LOT DE SECOURS ROMAGNAT (SAC BAGHEERA)
-        // =========================================================
-        const BAGHEERA_DEFAULT_ITEMS = [
-            // TROUSSE VERTE
-            { id: 'bg_v_01', name: 'Bandes extensibles 7 cm', category: 'Trousse Verte', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_02', name: 'Bandes extensibles 10 cm', category: 'Trousse Verte', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_03', name: 'Biseptine (flacon)', category: 'Trousse Verte', lotTarget: 2, lotCurrent: 2, reserve: 3, minThreshold: 3, batch: '', expiry: futureDate(14), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_04', name: 'Champs stériles', category: 'Trousse Verte', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(18), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_05', name: 'Chlorure de sodium 10 ml (unidoses)', category: 'Trousse Verte', lotTarget: 3, lotCurrent: 3, reserve: 10, minThreshold: 6, batch: '', expiry: futureDate(18), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_06', name: 'Filet tubulaire', category: 'Trousse Verte', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_07', name: 'Compresses stériles (Trousse Verte)', category: 'Trousse Verte', lotTarget: 5, lotCurrent: 5, reserve: 15, minThreshold: 8, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_08', name: 'Pansements américains (Trousse Verte)', category: 'Trousse Verte', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_09', name: 'Poche de froid instantané', category: 'Trousse Verte', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(20), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_10', name: 'Sparadrap (rouleau avec dévidoir)', category: 'Trousse Verte', lotTarget: 1, lotCurrent: 1, reserve: 3, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_v_11', name: 'Écharpes triangulaires', category: 'Trousse Verte', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-
-            // TROUSSE ROUGE
-            { id: 'bg_r_01', name: 'Bande substance hémostatique', category: 'Trousse Rouge', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_02', name: 'Bandes extensibles 7 cm (Trousse Rouge)', category: 'Trousse Rouge', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_03', name: 'Couverture de survie', category: 'Trousse Rouge', lotTarget: 2, lotCurrent: 2, reserve: 6, minThreshold: 4, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_04', name: 'Garrots tourniquets', category: 'Trousse Rouge', lotTarget: 2, lotCurrent: 2, reserve: 2, minThreshold: 3, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_05', name: 'Marqueur indélébile', category: 'Trousse Rouge', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: '', supplier: 'Fournitures Caserne' },
-            { id: 'bg_r_06', name: 'Pansements compressifs', category: 'Trousse Rouge', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_07', name: 'Compresses stériles (Trousse Rouge)', category: 'Trousse Rouge', lotTarget: 2, lotCurrent: 2, reserve: 6, minThreshold: 4, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_08', name: 'Pansements américains (Trousse Rouge)', category: 'Trousse Rouge', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_09', name: 'Scotch de combat', category: 'Trousse Rouge', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_10', name: 'Brûle-Stop 10 x 10 cm', category: 'Trousse Rouge', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: futureDate(18), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_r_11', name: 'Brûle-Stop 20 x 20 cm', category: 'Trousse Rouge', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: futureDate(18), supplier: 'Pharmacie SDIS' },
-
-            // POCHE SAC DE SECOURS
-            { id: 'bg_p_01', name: 'Collier cervical adulte', category: 'Poche Sac de Secours', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_p_02', name: 'Collier cervical pédiatrique', category: 'Poche Sac de Secours', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 2, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_p_03', name: 'Sac de section de membre', category: 'Poche Sac de Secours', lotTarget: 2, lotCurrent: 2, reserve: 2, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-
-            // TROUSSE NOIRE
-            { id: 'bg_n_01', name: 'Lecteur de glycémie', category: 'Trousse Noire', lotTarget: 1, lotCurrent: 1, reserve: 0, minThreshold: 1, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_02', name: 'Boîte de bandelettes glycémie', category: 'Trousse Noire', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: futureDate(10), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_03', name: 'Lancettes autopiqueurs', category: 'Trousse Noire', lotTarget: 5, lotCurrent: 5, reserve: 20, minThreshold: 10, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_04', name: 'Chlorure de sodium 10 ml (Trousse Noire)', category: 'Trousse Noire', lotTarget: 1, lotCurrent: 1, reserve: 5, minThreshold: 3, batch: '', expiry: futureDate(18), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_05', name: 'Compresses stériles (Trousse Noire)', category: 'Trousse Noire', lotTarget: 2, lotCurrent: 2, reserve: 6, minThreshold: 4, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_06', name: 'Thermomètre médical', category: 'Trousse Noire', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 1, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_07', name: 'Protections de thermomètre', category: 'Trousse Noire', lotTarget: 5, lotCurrent: 5, reserve: 25, minThreshold: 10, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_08', name: 'Sac DASRI', category: 'Trousse Noire', lotTarget: 1, lotCurrent: 1, reserve: 5, minThreshold: 3, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_09', name: 'Stylo pupilles', category: 'Trousse Noire', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 1, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_n_10', name: 'Ciseaux Gesco / Jesco', category: 'Trousse Noire', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 1, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-
-            // TROUSSE ORANGE
-            { id: 'bg_o_01', name: 'Kit AELB (Accouchement Extra-Hospitalier / AEV)', category: 'Trousse Orange', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 2, batch: '', expiry: futureDate(18), supplier: 'Pharmacie SDIS' },
-
-            // SAC OXYGÈNE
-            { id: 'bg_ox_01', name: "Bouteille d'oxygène médical (plein / contrôle pression)", category: 'Sac Oxygène', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 2, batch: '', expiry: futureDate(36), supplier: 'Air Products' },
-            { id: 'bg_ox_02', name: 'Aspirateur de mucosités manuel', category: 'Sac Oxygène', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_ox_03', name: 'BAVU Adulte (2 masques + 1 filtre)', category: 'Sac Oxygène', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_ox_04', name: 'BAVU Pédiatrique (2 masques + 1 filtre)', category: 'Sac Oxygène', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-
-            // TROUSSE BLEUE
-            { id: 'bg_b_01', name: 'MHC Adulte (Masque Haute Concentration)', category: 'Trousse Bleue', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_b_02', name: 'MHC Pédiatrique (Masque Haute Concentration)', category: 'Trousse Bleue', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_b_03', name: 'Lunettes à oxygène (O2)', category: 'Trousse Bleue', lotTarget: 1, lotCurrent: 1, reserve: 3, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_b_04', name: 'Jeu de canules de Guedel (tailles 0, 1, 2, 3, 4)', category: 'Trousse Bleue', lotTarget: 1, lotCurrent: 1, reserve: 2, minThreshold: 2, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_b_05', name: 'Champ stérile (Trousse Bleue)', category: 'Trousse Bleue', lotTarget: 1, lotCurrent: 1, reserve: 3, minThreshold: 2, batch: '', expiry: futureDate(18), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_b_06', name: 'Filtres antibactériens / antiviraux', category: 'Trousse Bleue', lotTarget: 2, lotCurrent: 2, reserve: 4, minThreshold: 3, batch: '', expiry: futureDate(24), supplier: 'Pharmacie SDIS' },
-
-            // DSA
-            { id: 'bg_d_01', name: 'Électrodes DSA Adulte', category: 'DSA', lotTarget: 2, lotCurrent: 2, reserve: 2, minThreshold: 3, batch: '', expiry: futureDate(12), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_d_02', name: 'Électrodes DSA Pédiatrique', category: 'DSA', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 2, batch: '', expiry: futureDate(12), supplier: 'Pharmacie SDIS' },
-            { id: 'bg_d_03', name: 'Ciseau (trousse DSA)', category: 'DSA', lotTarget: 1, lotCurrent: 1, reserve: 1, minThreshold: 1, batch: '', expiry: '', supplier: 'Pharmacie SDIS' },
-            { id: 'bg_d_04', name: 'Rasoir jetable (trousse DSA)', category: 'DSA', lotTarget: 1, lotCurrent: 1, reserve: 4, minThreshold: 3, batch: '', expiry: '', supplier: 'Pharmacie SDIS' }
-        ];
-
-        // =========================================================
-        // ÉTAT DE L'APPLICATION
-        // =========================================================
-        const LOCAL_STORAGE_KEY = 'pharmasecours_romagnat_v1';
-        let items = [];
-        let movements = [];
-        let checklistState = {
-            checkedIds: [],
-            lastValidated: null,
-            lastChecker: '',
-            lastNote: ''
-        };
-        let adminPin = '1818';
-        let publicBaseUrl = '';
-        let isAdminUnlocked = false;
-        let currentQuickFilter = 'all';
-        let currentChecklistPouch = 'ALL';
-        let customOrderQuantities = {};
-
-        // Variables Firebase (synchronisation temps réel multi-appareils)
-        let db = null;
-        let auth = null;
-        let currentUser = null;
-        let sharedDocRef = null;
-        let isSyncingFromRemote = false;
-
-        // =========================================================
-        // INITIALISATION & SYNCHRONISATION TEMPS RÉEL (FIRESTORE)
-        // =========================================================
-        async function initApp() {
-            loadLocalFallback();
-            refreshAllViews();
-
-            const params = new URLSearchParams(window.location.search);
-            const targetView = params.get('view');
-            if (targetView === 'verif') {
-                switchTab('checklist');
-            } else if (targetView === 'stock') {
-                switchTab('inventory');
-            }
-
-            try {
-                if (typeof __firebase_config !== 'undefined' && __firebase_config) {
-                    const firebaseConfig = JSON.parse(__firebase_config);
-                    const appId = typeof __app_id !== 'undefined' ? __app_id : 'romagnat-secours-caserne';
-                    const app = initializeApp(firebaseConfig);
-                    auth = getAuth(app);
-                    db = getFirestore(app);
-
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        const cred = await signInWithCustomToken(auth, __initial_auth_token);
-                        currentUser = cred.user;
-                    } else {
-                        const cred = await signInAnonymously(auth);
-                        currentUser = cred.user;
-                    }
-
-                    if (currentUser) {
-                        sharedDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'caserne_pharmacopie', 'bagheera_romagnat');
-                        updateSyncBadge(true);
-
-                        onSnapshot(sharedDocRef, (snapshot) => {
-                            if (snapshot.exists()) {
-                                const data = snapshot.data();
-                                isSyncingFromRemote = true;
-                                if (Array.isArray(data.items) && data.items.length > 0) items = data.items;
-                                if (Array.isArray(data.movements)) movements = data.movements;
-                                if (data.checklistState) checklistState = data.checklistState;
-                                if (data.adminPin) adminPin = data.adminPin;
-                                if (typeof data.publicBaseUrl === 'string') {
-                                    publicBaseUrl = data.publicBaseUrl;
-                                    const urlInput = document.getElementById('publicBaseUrlInput');
-                                    if (urlInput && !urlInput.value) urlInput.value = publicBaseUrl;
-                                }
-
-                                saveLocalFallback();
-                                refreshAllViews();
-                                generateTruckQRCode();
-                                isSyncingFromRemote = false;
-                            } else {
-                                pushStateToCloud();
-                            }
-                        }, (error) => {
-                            console.error("Erreur écoute Firestore:", error);
-                            updateSyncBadge(false);
-                        });
-                    }
-                }
-            } catch (err) {
-                console.warn("Fonctionnement en stockage local:", err);
-                updateSyncBadge(false);
-            }
-
-            generateTruckQRCode();
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        function updateSyncBadge(isCloudConnected) {
-            const badge = document.getElementById('syncStatusBadge');
-            if (!badge) return;
-            if (isCloudConnected) {
-                badge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300";
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Synchro Directe`;
-            } else {
-                badge.className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 text-[11px] font-semibold rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300";
-                badge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Mode Appareil`;
-            }
-        }
-
-        async function persistAllState() {
-            saveLocalFallback();
-            if (!isSyncingFromRemote) {
-                await pushStateToCloud();
-            }
-        }
-
-        async function pushStateToCloud() {
-            if (!db || !currentUser || !sharedDocRef) return;
-            try {
-                await setDoc(sharedDocRef, {
-                    items: items,
-                    movements: movements.slice(0, 150),
-                    checklistState: checklistState,
-                    adminPin: adminPin,
-                    publicBaseUrl: publicBaseUrl,
-                    updatedAt: new Date().toISOString()
-                });
-            } catch (e) {
-                console.error("Erreur sauvegarde Firestore:", e);
-            }
-        }
-
-        function loadLocalFallback() {
-            try {
-                const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    items = Array.isArray(parsed.items) && parsed.items.length > 0 ? parsed.items : JSON.parse(JSON.stringify(BAGHEERA_DEFAULT_ITEMS));
-                    movements = Array.isArray(parsed.movements) ? parsed.movements : [];
-                    checklistState = parsed.checklistState || { checkedIds: [], lastValidated: null, lastChecker: '', lastNote: '' };
-                    adminPin = parsed.adminPin || '1818';
-                    publicBaseUrl = parsed.publicBaseUrl || '';
-                } else {
-                    items = JSON.parse(JSON.stringify(BAGHEERA_DEFAULT_ITEMS));
-                    movements = [];
-                    saveLocalFallback();
-                }
-                const urlInput = document.getElementById('publicBaseUrlInput');
-                if (urlInput && publicBaseUrl) urlInput.value = publicBaseUrl;
-            } catch (e) {
-                items = JSON.parse(JSON.stringify(BAGHEERA_DEFAULT_ITEMS));
-            }
-        }
-
-        function saveLocalFallback() {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({
-                items,
-                movements,
-                checklistState,
-                adminPin,
-                publicBaseUrl
-            }));
-        }
-
-        // =========================================================
-        // NAVIGATION ENTRE LES ONGLETS
-        // =========================================================
-        window.switchTab = function(tabName) {
-            const views = ['checklist', 'inventory', 'movements', 'orders', 'qrcode'];
-            views.forEach(v => {
-                const viewEl = document.getElementById(`view-${v}`);
-                const navEl = document.getElementById(`nav-${v}`);
-                if (viewEl) viewEl.classList.add('hidden');
-                if (navEl) {
-                    navEl.classList.remove('tab-active');
-                    navEl.classList.add('text-slate-500', 'dark:text-slate-400');
-                }
-            });
-
-            const activeView = document.getElementById(`view-${tabName}`);
-            const activeNav = document.getElementById(`nav-${tabName}`);
-            if (activeView) activeView.classList.remove('hidden');
-            if (activeNav) {
-                activeNav.classList.add('tab-active');
-                activeNav.classList.remove('text-slate-500', 'dark:text-slate-400');
-            }
-
-            if (tabName === 'qrcode') {
-                generateTruckQRCode();
-            }
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        };
-
-        // =========================================================
-        // MODE RESPONSABLE / POMPIER (VERROUILLAGE PIN)
-        // =========================================================
-        window.toggleAdminMode = function() {
-            if (isAdminUnlocked) {
-                lockAdminMode();
-            } else {
-                const modal = document.getElementById('pinModal');
-                const input = document.getElementById('pinInput');
-                const err = document.getElementById('pinError');
-                if (input) input.value = '';
-                if (err) err.classList.add('hidden');
-                if (modal) modal.classList.remove('hidden');
-                setTimeout(() => { if (input) input.focus(); }, 50);
-            }
-        };
-
-        window.closePinModal = function() {
-            const modal = document.getElementById('pinModal');
-            if (modal) modal.classList.add('hidden');
-        };
-
-        window.verifyPinCode = function(event) {
-            if (event) event.preventDefault();
-            const input = document.getElementById('pinInput');
-            const err = document.getElementById('pinError');
-            if (!input) return;
-
-            if (input.value.trim() === String(adminPin)) {
-                isAdminUnlocked = true;
-                closePinModal();
-                updateAdminUI();
-                showToast("Mode Responsable Pharmacie déverrouillé.", "success");
-            } else {
-                if (err) err.classList.remove('hidden');
-                input.value = '';
-                input.focus();
-            }
-        };
-
-        window.updateAdminPin = async function(event) {
-            if (event) event.preventDefault();
-            const newPinInput = document.getElementById('newPinInput');
-            if (!newPinInput) return;
-            const val = newPinInput.value.trim();
-            if (!/^\d{4,6}$/.test(val)) {
-                showToast("Le code PIN doit contenir entre 4 et 6 chiffres.", "error");
-                return;
-            }
-            adminPin = val;
-            newPinInput.value = '';
-            await persistAllState();
-            showToast("Nouveau code PIN Responsable enregistré.", "success");
-        };
-
-        window.lockAdminMode = function() {
-            isAdminUnlocked = false;
-            if (currentQuickFilter === 'low' || currentQuickFilter === 'expiring') {
-                currentQuickFilter = 'all';
-            }
-            updateAdminUI();
-            if (!document.getElementById('view-orders').classList.contains('hidden') ||
-                !document.getElementById('view-movements').classList.contains('hidden')) {
-                switchTab('inventory');
-            }
-            showToast("Mode Responsable verrouillé (Retour Mode Pompier).", "info");
-        };
-
-        function updateAdminUI() {
-            const btn = document.getElementById('adminModeBtn');
-            const label = document.getElementById('adminModeLabel');
-            const icon = document.getElementById('adminLockIcon');
-            const banner = document.getElementById('adminBanner');
-            const kpiGrid = document.getElementById('kpiGrid');
-            const navInventoryLabel = document.getElementById('navInventoryLabel');
-
-            document.querySelectorAll('.admin-only').forEach(el => {
-                if (isAdminUnlocked) {
-                    el.classList.remove('hidden');
-                } else {
-                    el.classList.add('hidden');
-                }
-            });
-
-            if (isAdminUnlocked) {
-                btn.className = "inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-bold rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-sm transition";
-                label.textContent = "Responsable Actif";
-                icon.setAttribute('data-lucide', 'unlock');
-                icon.className = "w-4 h-4 text-slate-950";
-                banner.classList.remove('hidden');
-                if (kpiGrid) kpiGrid.className = "grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4";
-                if (navInventoryLabel) navInventoryLabel.textContent = "Stocks & Réserve";
-            } else {
-                btn.className = "inline-flex items-center gap-2 px-3.5 py-2 text-xs sm:text-sm font-bold rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-white border border-slate-700 shadow-sm transition";
-                label.textContent = "Mode Pompier";
-                icon.setAttribute('data-lucide', 'lock');
-                icon.className = "w-4 h-4 text-amber-400";
-                banner.classList.add('hidden');
-                if (kpiGrid) kpiGrid.className = "grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4";
-                if (navInventoryLabel) navInventoryLabel.textContent = "Armement & Sorties";
-            }
-            refreshAllViews();
-        }
-
-        // =========================================================
-        // CALCULS MÉTIER (SEUILS & PÉREMPTIONS)
-        // =========================================================
-        function getTotalStock(item) {
-            return (Number(item.lotCurrent) || 0) + (Number(item.reserve) || 0);
-        }
-
-        function isLowStock(item) {
-            return getTotalStock(item) <= (Number(item.minThreshold) || 0);
-        }
-
-        function isLotIncomplete(item) {
-            return (Number(item.lotCurrent) || 0) < (Number(item.lotTarget) || 0);
-        }
-
-        function getExpiryStatus(expiryStr) {
-            if (!expiryStr) {
-                return { code: 'NONE', label: 'Sans péremption', badgeClass: 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400', isAlert: false };
-            }
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const expDate = new Date(expiryStr);
-            const diffDays = Math.ceil((expDate - today) / (1000 * 60 * 60 * 24));
-            const formattedDate = expDate.toLocaleDateString('fr-FR', { month: 'short', year: 'numeric' });
-
-            if (diffDays < 0) {
-                return { code: 'EXPIRED', label: `Périmé (${formattedDate})`, badgeClass: 'bg-fire-100 text-fire-700 dark:bg-fire-950 dark:text-fire-300 font-bold', isAlert: true };
-            } else if (diffDays <= 30) {
-                return { code: 'CRITICAL', label: `Expire < 1 mois (${formattedDate})`, badgeClass: 'bg-fire-100 text-fire-700 dark:bg-fire-950 dark:text-fire-300 font-bold', isAlert: true };
-            } else if (diffDays <= 90) {
-                return { code: 'WARNING', label: `Expire < 3 mois (${formattedDate})`, badgeClass: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 font-semibold', isAlert: true };
-            } else {
-                return { code: 'OK', label: `DMP : ${formattedDate}`, badgeClass: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300', isAlert: false };
-            }
-        }
-
-        // =========================================================
-        // MISE À JOUR GLOBALE DES VUES
-        // =========================================================
-        function refreshAllViews() {
-            updateKPIs();
-            renderInventory();
-            renderMovements();
-            renderChecklist();
-            renderOrders();
-            populateMovementItemSelect();
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        function updateKPIs() {
-            const totalRefs = items.length;
-            const lowStockCount = items.filter(isLowStock).length;
-            const expiringCount = items.filter(i => getExpiryStatus(i.expiry).isAlert).length;
-            const incompleteCount = items.filter(isLotIncomplete).length;
-            const toOrderCount = items.filter(i => isLowStock(i) || getExpiryStatus(i.expiry).isAlert).length;
-
-            document.getElementById('kpi-total').textContent = totalRefs;
-            document.getElementById('kpi-low').textContent = lowStockCount;
-            document.getElementById('kpi-expiring').textContent = expiringCount;
-            document.getElementById('kpi-incomplete').textContent = incompleteCount;
-
-            const homeBanner = document.getElementById('homeLastCheckBanner');
-            if (homeBanner) {
-                if (checklistState.lastValidated) {
-                    const d = new Date(checklistState.lastValidated);
-                    homeBanner.innerHTML = `Dernier contrôle Lot de secours Romagnat : <strong class="text-emerald-600 dark:text-emerald-400">${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</strong> par <strong>${checklistState.lastChecker || 'Équipage'}</strong>`;
-                } else {
-                    homeBanner.textContent = "Dernier contrôle Lot de secours Romagnat : Aucun enregistré";
-                }
-            }
-
-            const badgeOrders = document.getElementById('badge-orders');
-            if (badgeOrders) badgeOrders.textContent = toOrderCount;
-
-            const badgeChecklist = document.getElementById('badge-checklist');
-            if (badgeChecklist) {
-                const checkedValid = checklistState.checkedIds.filter(id => items.some(i => i.id === id)).length;
-                badgeChecklist.textContent = `${checkedValid}/${items.length}`;
-            }
-        }
-
-        // =========================================================
-        // FILTRES & RENDU DE L'INVENTAIRE
-        // =========================================================
-        window.setQuickFilter = function(filter) {
-            currentQuickFilter = filter;
-            document.querySelectorAll('.qf-btn').forEach(btn => {
-                btn.className = "qf-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 transition";
-            });
-            const activeBtn = document.getElementById(`qf-${filter}`);
-            if (activeBtn) {
-                activeBtn.className = "qf-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-900 text-white dark:bg-white dark:text-slate-900 transition";
-            }
-            renderInventory();
-        };
-
-        window.renderInventory = function() {
-            const container = document.getElementById('inventoryList');
-            const emptyState = document.getElementById('emptyInventoryState');
-            if (!container) return;
-
-            const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
-            const pouchVal = document.getElementById('pouchFilter')?.value || 'ALL';
-
-            const filtered = items.filter(item => {
-                const matchesSearch = !searchVal ||
-                    item.name.toLowerCase().includes(searchVal) ||
-                    item.category.toLowerCase().includes(searchVal) ||
-                    (item.batch && item.batch.toLowerCase().includes(searchVal));
-                const matchesPouch = pouchVal === 'ALL' || item.category === pouchVal;
-
-                let matchesQuick = true;
-                if (currentQuickFilter === 'low' && isAdminUnlocked) matchesQuick = isLowStock(item);
-                if (currentQuickFilter === 'expiring' && isAdminUnlocked) matchesQuick = getExpiryStatus(item.expiry).isAlert;
-                if (currentQuickFilter === 'lot') matchesQuick = isLotIncomplete(item);
-
-                return matchesSearch && matchesPouch && matchesQuick;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            emptyState.classList.add('hidden');
-
-            container.innerHTML = filtered.map(item => {
-                const total = getTotalStock(item);
-                const low = isLowStock(item);
-                const lotMissing = isLotIncomplete(item);
-                const expStatus = getExpiryStatus(item.expiry);
-                const pouchStyle = POUCH_STYLES[item.category] || POUCH_STYLES['Trousse Noire'];
-                const showAdminAlerts = isAdminUnlocked;
-
-                return `
-                <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border ${showAdminAlerts && (low || expStatus.code === 'EXPIRED') ? 'border-fire-300 dark:border-fire-800/80' : 'border-slate-200 dark:border-slate-800'} shadow-sm transition">
-                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                        
-                        <div class="flex-1 min-w-0 space-y-1.5">
-                            <div class="flex flex-wrap items-center gap-2">
-                                <span class="px-2.5 py-0.5 text-[11px] font-bold rounded-md ${pouchStyle.badge}">
-                                    ${item.category}
-                                </span>
-                                ${showAdminAlerts && low ? `<span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-fire-100 text-fire-700 dark:bg-fire-950 dark:text-fire-300">Stock Bas (&le; ${item.minThreshold})</span>` : ''}
-                                ${lotMissing ? `<span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">Sac incomplet (${item.lotCurrent}/${item.lotTarget})</span>` : ''}
-                            </div>
-
-                            <h3 class="text-base font-bold text-slate-900 dark:text-white leading-snug">
-                                ${item.name}
-                            </h3>
-
-                            ${showAdminAlerts ? `
-                            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
-                                <span>Lot : <strong class="text-slate-700 dark:text-slate-200">${item.batch || 'N/A'}</strong></span>
-                                ${item.supplier ? `<span>Fournisseur : <strong class="text-slate-700 dark:text-slate-200">${item.supplier}</strong></span>` : ''}
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] ${expStatus.badgeClass}">
-                                    ${expStatus.label}
-                                </span>
-                            </div>
-                            ` : `
-                            <p class="text-xs text-slate-500 dark:text-slate-400">
-                                Dotation réglementaire : <strong>${item.lotTarget}</strong> &bull; Réserve disponible : <strong>${item.reserve}</strong>
-                            </p>
-                            `}
-                        </div>
-
-                        <!-- Compteurs Sac / Réserve (et Total uniquement en Mode Responsable) -->
-                        <div class="grid ${showAdminAlerts ? 'grid-cols-3' : 'grid-cols-2'} gap-2 sm:gap-3 bg-slate-50 dark:bg-slate-800/60 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 shrink-0">
-                            <div class="text-center px-2">
-                                <span class="block text-[10px] font-semibold uppercase text-slate-400">Dotation Sac</span>
-                                <span class="text-sm sm:text-base font-extrabold ${lotMissing ? 'text-amber-600 dark:text-amber-400' : 'text-slate-800 dark:text-slate-200'}">
-                                    ${item.lotCurrent}<span class="text-xs font-normal text-slate-400">/${item.lotTarget}</span>
-                                </span>
-                            </div>
-                            <div class="text-center px-2 ${showAdminAlerts ? 'border-x' : 'border-l'} border-slate-200 dark:border-slate-700">
-                                <span class="block text-[10px] font-semibold uppercase text-slate-400">Réserve</span>
-                                <span class="text-sm sm:text-base font-extrabold text-slate-800 dark:text-slate-200">
-                                    ${item.reserve}
-                                </span>
-                            </div>
-                            ${showAdminAlerts ? `
-                            <div class="text-center px-2">
-                                <span class="block text-[10px] font-semibold uppercase text-slate-400">Total</span>
-                                <span class="text-sm sm:text-base font-extrabold ${low ? 'text-fire-600 dark:text-fire-400' : 'text-emerald-600 dark:text-emerald-400'}">
-                                    ${total}
-                                </span>
-                            </div>
-                            ` : ''}
-                        </div>
-
-                        <!-- Boutons d'action -->
-                        <div class="flex items-center justify-end gap-2 shrink-0">
-                            ${lotMissing && item.reserve > 0 ? `
-                            <button onclick="rearmFromReserve('${item.id}')" title="Réarmer le sac depuis la réserve" class="inline-flex items-center justify-center gap-1 px-3 py-2.5 text-xs font-bold rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 dark:bg-amber-950 dark:text-amber-200 transition">
-                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
-                                <span>Réarmer</span>
-                            </button>
-                            ` : ''}
-
-                            <button onclick="quickStockAction('${item.id}', 'OUT_INTER')" title="Sortie Intervention (-1)" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs font-bold rounded-xl bg-fire-50 hover:bg-fire-100 active:scale-95 text-fire-700 border border-fire-200 dark:bg-fire-950/60 dark:text-fire-300 dark:border-fire-800/70 transition">
-                                <i data-lucide="minus" class="w-4 h-4"></i>
-                                <span>1 Inter</span>
-                            </button>
-
-                            ${isAdminUnlocked ? `
-                            <button onclick="quickStockAction('${item.id}', 'IN_RESTOCK')" title="Entrée Réserve (+1)" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 text-xs font-bold rounded-xl bg-emerald-50 hover:bg-emerald-100 active:scale-95 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800/70 transition">
-                                <i data-lucide="plus" class="w-4 h-4"></i>
-                                <span>1 Réserve</span>
-                            </button>
-
-                            <button onclick="openItemModal('${item.id}')" title="Modifier l'article" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-                                <i data-lucide="pencil" class="w-4 h-4"></i>
-                            </button>
-                            ` : ''}
-                        </div>
-
-                    </div>
-                </div>
+                  </div>
                 `;
-            }).join('');
+              }).join("")}
+            </div>
+          </div>
+        `;
+      }).join("");
 
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        };
+      const total = state.items.length;
+      const done = checkedIds.size;
+      const pct = total ? Math.round((done / total) * 100) : 0;
+      document.getElementById("verif-progress-text").textContent = `${done} / ${total}`;
+      document.getElementById("verif-progress-bar").style.width = `${pct}%`;
+    }
 
-        // =========================================================
-        // ACTIONS RAPIDES SUR LE STOCK & RÉARMEMENT DU SAC
-        // =========================================================
-        window.quickStockAction = async function(itemId, actionType) {
-            const item = items.find(i => i.id === itemId);
-            if (!item) return;
+    window.toggleCheckItem = function (id) {
+      if (checkedIds.has(id)) checkedIds.delete(id);
+      else checkedIds.add(id);
+      renderChecklist();
+    };
 
-            if (actionType === 'OUT_INTER') {
-                if (item.lotCurrent > 0) {
-                    item.lotCurrent -= 1;
-                } else if (item.reserve > 0) {
-                    item.reserve -= 1;
-                } else {
-                    showToast(`Stock à 0 pour ${item.name}.`, "error");
-                    return;
-                }
-                movements.unshift({
-                    id: 'mov_' + Date.now(),
-                    date: new Date().toISOString(),
-                    itemId: item.id,
-                    itemName: item.name,
-                    category: item.category,
-                    type: 'OUT_INTER',
-                    qty: 1,
-                    operator: checklistState.lastChecker || 'Équipage Pompier',
-                    note: 'Prélèvement rapide (-1 Inter)'
-                });
-                showToast(`-1 ${item.name} enregistré.`, "info");
-            } else if (actionType === 'IN_RESTOCK') {
-                item.reserve += 1;
-                movements.unshift({
-                    id: 'mov_' + Date.now(),
-                    date: new Date().toISOString(),
-                    itemId: item.id,
-                    itemName: item.name,
-                    category: item.category,
-                    type: 'IN_RESTOCK',
-                    qty: 1,
-                    operator: 'Responsable Pharmacie',
-                    note: 'Ajout rapide réserve (+1)'
-                });
-                showToast(`+1 ${item.name} ajouté en réserve.`, "success");
-            }
+    window.resetChecklist = function () {
+      checkedIds.clear();
+      renderChecklist();
+    };
 
-            refreshAllViews();
-            await persistAllState();
-        };
+    window.submitVerification = async function () {
+      const agent = document.getElementById("verif-agent-name").value.trim();
+      if (!agent) {
+        alert("Veuillez renseigner votre nom ou matricule avant de valider le contrôle.");
+        document.getElementById("verif-agent-name").focus();
+        return;
+      }
+      const nowStr = new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
+      state.lastVerif = { date: nowStr, agent };
+      state.movements.unshift({
+        date: nowStr,
+        type: "Contrôle Sac",
+        item: `Vérification Lot de secours « Romagnat » (${checkedIds.size}/${state.items.length} cochés)`,
+        qty: "-",
+        agent
+      });
+      checkedIds.clear();
+      document.getElementById("verif-agent-name").value = "";
+      await persistState();
+      alert(`Contrôle du Lot de secours « Romagnat » validé et enregistré par ${agent} !`);
+    };
 
-        window.rearmFromReserve = async function(itemId) {
-            const item = items.find(i => i.id === itemId);
-            if (!item) return;
-            const needed = item.lotTarget - item.lotCurrent;
-            if (needed <= 0) return;
+    // INVENTORY & MOVEMENTS
+    window.quickBagUse = async function (id) {
+      const item = state.items.find((i) => i.id === id);
+      if (!item) return;
+      if (item.bagQty > 0) {
+        item.bagQty -= 1;
+      } else if (item.reserveQty > 0) {
+        item.reserveQty -= 1;
+      } else {
+        alert("Stock sac et réserve déjà à 0 !");
+        return;
+      }
+      state.movements.unshift({
+        date: new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }),
+        type: "Sortie Inter",
+        item: `${item.name} (${item.compartment})`,
+        qty: -1,
+        agent: isAdmin ? "Responsable" : "Équipage / Pompier"
+      });
+      await persistState();
+    };
 
-            if (item.reserve <= 0) {
-                showToast(`Réserve épuisée pour ${item.name}. À commander !`, "error");
-                return;
-            }
+    window.rearmFromReserve = async function (id) {
+      const item = state.items.find((i) => i.id === id);
+      if (!item) return;
+      const needed = Math.max(0, item.bagTarget - item.bagQty);
+      if (needed === 0) return;
+      if (item.reserveQty < needed) {
+        alert(`Stock en réserve insuffisant (${item.reserveQty} disponible(s) pour ${needed} nécessaire(s)).`);
+        return;
+      }
+      item.reserveQty -= needed;
+      item.bagQty += needed;
+      state.movements.unshift({
+        date: new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }),
+        type: "Réarmement Sac",
+        item: `${item.name} (Réserve -> ${item.compartment})`,
+        qty: needed,
+        agent: isAdmin ? "Responsable" : "Équipage / Pompier"
+      });
+      await persistState();
+    };
 
-            const transfer = Math.min(needed, item.reserve);
-            item.lotCurrent += transfer;
-            item.reserve -= transfer;
+    window.quickReserveAdd = async function (id) {
+      const item = state.items.find((i) => i.id === id);
+      if (!item) return;
+      item.reserveQty += 1;
+      state.movements.unshift({
+        date: new Date().toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" }),
+        type: "Entrée Réserve",
+        item: item.name,
+        qty: "+1",
+        agent: "Responsable Pharmacie"
+      });
+      await persistState();
+    };
 
-            movements.unshift({
-                id: 'mov_' + Date.now(),
-                date: new Date().toISOString(),
-                itemId: item.id,
-                itemName: item.name,
-                category: item.category,
-                type: 'REARM',
-                qty: transfer,
-                operator: checklistState.lastChecker || 'Équipage Pompier',
-                note: `Réarmement sac (+${transfer} depuis réserve)`
-            });
+    window.setQuickFilter = function (f) {
+      quickFilter = f;
+      const btn = document.getElementById("btn-clear-quick-filter");
+      if (f === "all") btn.classList.add("hidden");
+      else btn.classList.remove("hidden");
+      renderStocks();
+    };
 
-            refreshAllViews();
-            await persistAllState();
-            showToast(`Sac réarmé : +${transfer} ${item.name}`, "success");
-        };
+    function renderStocks() {
+      const search = document.getElementById("search-input").value.toLowerCase();
+      const compFilter = document.getElementById("filter-compartment").value;
 
-        // =========================================================
-        // VUE 1 : CHECK-LIST VÉRIFICATION SAC BAGHEERA
-        // =========================================================
-        window.setChecklistPouch = function(pouchName) {
-            currentChecklistPouch = pouchName;
-            renderChecklist();
-        };
+      let lowCount = 0;
+      let expiryCount = 0;
 
-        function renderChecklist() {
-            const container = document.getElementById('checklistContainer');
-            const tabsContainer = document.getElementById('checklistPouchTabs');
-            const progressText = document.getElementById('checklistProgressText');
-            const progressBar = document.getElementById('checklistProgressBar');
-            const lastCheckInfo = document.getElementById('lastCheckInfo');
-            if (!container) return;
+      state.items.forEach((item) => {
+        if (item.reserveQty <= item.minStock) lowCount++;
+        if (getExpiryStatus(item.expiry) !== "ok") expiryCount++;
+      });
 
-            if (checklistState.lastValidated) {
-                const d = new Date(checklistState.lastValidated);
-                lastCheckInfo.innerHTML = `Dernier contrôle validé : <strong class="text-emerald-600 dark:text-emerald-400">${d.toLocaleDateString('fr-FR')} à ${d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</strong> par <strong>${checklistState.lastChecker || 'Équipage'}</strong> ${checklistState.lastNote ? `(${checklistState.lastNote})` : ''}`;
-            }
+      document.getElementById("kpi-total-items").textContent = state.items.length;
+      document.getElementById("kpi-low-stock").textContent = lowCount;
+      document.getElementById("kpi-expiry").textContent = expiryCount;
 
-            const total = items.length;
-            const checkedCount = checklistState.checkedIds.filter(id => items.some(i => i.id === id)).length;
-            const pct = total === 0 ? 0 : Math.round((checkedCount / total) * 100);
-            progressText.textContent = `${pct} % (${checkedCount}/${total} contrôlés)`;
-            progressBar.style.width = `${pct}%`;
+      const filtered = state.items.filter((item) => {
+        const matchSearch = item.name.toLowerCase().includes(search) || item.compartment.toLowerCase().includes(search);
+        const matchComp = compFilter === "ALL" || item.compartment === compFilter;
+        if (!matchSearch || !matchComp) return false;
+        if (quickFilter === "low") return item.reserveQty <= item.minStock;
+        if (quickFilter === "expiry") return getExpiryStatus(item.expiry) !== "ok";
+        return true;
+      });
 
-            const pouches = ['ALL', ...POUCH_ORDER.filter(p => items.some(i => i.category === p))];
-            tabsContainer.innerHTML = pouches.map(p => {
-                const active = currentChecklistPouch === p;
-                const label = p === 'ALL' ? 'Toutes les trousses' : p;
-                return `
-                <button onclick="setChecklistPouch('${p}')" class="px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition ${active ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300'}">
-                    ${label}
-                </button>
-                `;
-            }).join('');
+      const tbody = document.getElementById("stocks-tbody");
+      tbody.innerHTML = filtered.map((item) => {
+        const style = COMPARTMENT_STYLES[item.compartment] || { badge: "bg-slate-100 text-slate-800" };
+        const bagMissing = item.bagQty < item.bagTarget;
+        const isLow = item.reserveQty <= item.minStock;
+        const expStatus = getExpiryStatus(item.expiry);
 
-            const pouchesToDisplay = currentChecklistPouch === 'ALL'
-                ? POUCH_ORDER.filter(p => items.some(i => i.category === p))
-                : [currentChecklistPouch];
-
-            container.innerHTML = pouchesToDisplay.map(pouch => {
-                const pouchItems = items.filter(i => i.category === pouch);
-                const style = POUCH_STYLES[pouch] || POUCH_STYLES['Trousse Noire'];
-                const pouchChecked = pouchItems.filter(i => checklistState.checkedIds.includes(i.id)).length;
-
-                return `
-                <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                    <div class="${style.header} px-4 py-3 flex items-center justify-between">
-                        <div class="flex items-center gap-2 font-extrabold text-sm">
-                            <i data-lucide="briefcase" class="w-4 h-4"></i>
-                            <span>${pouch}</span>
-                        </div>
-                        <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-black/20">
-                            ${pouchChecked} / ${pouchItems.length}
-                        </span>
-                    </div>
-
-                    <div class="divide-y divide-slate-100 dark:divide-slate-800">
-                        ${pouchItems.map(item => {
-                            const isChecked = checklistState.checkedIds.includes(item.id);
-                            const incomplete = isLotIncomplete(item);
-                            return `
-                            <div class="p-3.5 sm:p-4 flex items-center justify-between gap-3 ${isChecked ? 'bg-emerald-50/40 dark:bg-emerald-950/15' : ''} transition">
-                                <label class="flex items-center gap-3.5 cursor-pointer flex-1 min-w-0">
-                                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleChecklistItem('${item.id}')" class="w-5 h-5 rounded-lg text-emerald-600 border-slate-300 focus:ring-emerald-500 cursor-pointer shrink-0">
-                                    <div class="min-w-0">
-                                        <p class="text-sm font-bold ${isChecked ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-900 dark:text-white'}">
-                                            ${item.name}
-                                        </p>
-                                        <p class="text-xs text-slate-500 mt-0.5">
-                                            Quantité attendue : <strong class="text-slate-800 dark:text-slate-200">${item.lotTarget}</strong>
-                                            &bull; Présent dans le sac : <strong class="${incomplete ? 'text-fire-600' : 'text-emerald-600'}">${item.lotCurrent}</strong>
-                                            ${isAdminUnlocked && item.expiry ? ` &bull; DMP : ${new Date(item.expiry).toLocaleDateString('fr-FR', { month: '2-digit', year: 'numeric' })}` : ''}
-                                        </p>
-                                    </div>
-                                </label>
-
-                                <div class="flex items-center gap-2 shrink-0">
-                                    ${incomplete ? `
-                                        <button onclick="rearmFromReserve('${item.id}')" class="px-2.5 py-1.5 text-xs font-bold rounded-xl bg-amber-100 text-amber-900 hover:bg-amber-200 dark:bg-amber-950 dark:text-amber-200 transition">
-                                            Réarmer (${item.lotCurrent}/${item.lotTarget})
-                                        </button>
-                                    ` : `
-                                        <span class="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-                                            Qté : ${item.lotTarget}
-                                        </span>
-                                    `}
-                                </div>
-                            </div>
-                            `;
-                        }).join('')}
-                    </div>
-                </div>
-                `;
-            }).join('');
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
+        let expBadge = `<span class="text-xs text-slate-400">Non renseignée</span>`;
+        if (item.expiry) {
+          const cls = expStatus === "critical" ? "bg-red-100 text-red-700 font-bold" : expStatus === "warning" ? "bg-amber-100 text-amber-800 font-bold" : "bg-slate-100 text-slate-700";
+          expBadge = `<span class="px-2 py-0.5 rounded text-xs ${cls}">${item.expiry}</span>`;
         }
 
-        window.toggleChecklistItem = async function(itemId) {
-            const idx = checklistState.checkedIds.indexOf(itemId);
-            if (idx === -1) {
-                checklistState.checkedIds.push(itemId);
-            } else {
-                checklistState.checkedIds.splice(idx, 1);
-            }
-            updateKPIs();
-            renderChecklist();
-            await persistAllState();
-        };
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-3 px-4">
+              <span class="inline-block px-2.5 py-1 rounded-lg text-xs font-bold border ${style.badge}">${item.compartment}</span>
+            </td>
+            <td class="py-3 px-4 font-semibold text-slate-900">${item.name}</td>
+            <td class="py-3 px-4 text-center">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-extrabold ${bagMissing ? "bg-red-100 text-red-700" : "bg-emerald-50 text-emerald-700"}">
+                ${item.bagQty} / ${item.bagTarget}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="font-extrabold ${isAdmin && isLow ? "text-red-600" : "text-slate-800"}">${item.reserveQty}</span>
+              ${isAdmin ? `<span class="text-[11px] text-slate-400 block">Seuil: ${item.minStock}</span>` : ""}
+            </td>
+            <td class="admin-only ${isAdmin ? "" : "hidden"} py-3 px-4">
+              <div class="text-xs text-slate-600 font-medium">${item.lot || "—"}</div>
+              <div class="mt-0.5">${expBadge}</div>
+            </td>
+            <td class="py-3 px-4 text-right whitespace-nowrap">
+              <div class="inline-flex items-center gap-1.5">
+                ${bagMissing ? `<button onclick="rearmFromReserve('${item.id}')" class="px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg">Réarmer</button>` : ""}
+                <button onclick="quickBagUse('${item.id}')" class="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 text-xs font-bold rounded-lg">-1 Inter</button>
+                ${isAdmin ? `
+                  <button onclick="quickReserveAdd('${item.id}')" class="px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold rounded-lg">+1</button>
+                  <button onclick="openItemModal('${item.id}')" class="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg" title="Modifier">
+                    <i data-lucide="pencil" class="w-4 h-4"></i>
+                  </button>
+                ` : ""}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+      lucide.createIcons();
+    }
 
-        window.resetChecklistProgress = async function() {
-            checklistState.checkedIds = [];
-            updateKPIs();
-            renderChecklist();
-            await persistAllState();
-            showToast("Cases décochées pour un nouveau contrôle.", "info");
-        };
+    function renderMovements() {
+      const tbody = document.getElementById("movements-tbody");
+      if (!state.movements.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-slate-400">Aucun mouvement enregistré pour le moment.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = state.movements.slice(0, 100).map((m) => `
+        <tr>
+          <td class="py-3 px-4 text-xs text-slate-500 whitespace-nowrap">${m.date}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-800">${m.type}</span></td>
+          <td class="py-3 px-4 font-medium text-slate-800">${m.item}</td>
+          <td class="py-3 px-4 text-center font-bold ${String(m.qty).startsWith("-") ? "text-red-600" : "text-emerald-600"}">${m.qty}</td>
+          <td class="py-3 px-4 text-xs text-slate-600">${m.agent}</td>
+        </tr>
+      `).join("");
+    }
 
-        window.checkAllChecklistItems = async function() {
-            checklistState.checkedIds = items.map(i => i.id);
-            updateKPIs();
-            renderChecklist();
-            await persistAllState();
-            showToast("Tous les éléments ont été cochés.", "success");
-        };
+    function renderOrders() {
+      const toOrder = state.items.filter((i) => i.reserveQty <= i.minStock || getExpiryStatus(i.expiry) !== "ok");
+      document.getElementById("badge-order-count").textContent = toOrder.length;
 
-        window.validateCompleteChecklist = async function() {
-            const checkerInput = document.getElementById('checkerNameInput');
-            const noteInput = document.getElementById('checkerNoteInput');
-            const checkerName = checkerInput.value.trim();
+      const tbody = document.getElementById("orders-tbody");
+      if (!toOrder.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-emerald-600 font-semibold">Tout est en ordre ! Aucun produit sous le seuil d'alerte.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = toOrder.map((i) => {
+        const isLow = i.reserveQty <= i.minStock;
+        const exp = getExpiryStatus(i.expiry) !== "ok";
+        const reason = [isLow ? "Stock bas" : "", exp ? `Péremption (${i.expiry})` : ""].filter(Boolean).join(" + ");
+        const suggestedQty = Math.max(1, i.minStock * 2 - i.reserveQty);
+        return `
+          <tr>
+            <td class="py-3 px-4 font-semibold text-slate-900">${i.name} <span class="text-xs text-slate-400">(${i.compartment})</span></td>
+            <td class="py-3 px-4 text-xs font-bold text-red-600">${reason}</td>
+            <td class="py-3 px-4 text-center font-bold">${i.reserveQty}</td>
+            <td class="py-3 px-4 text-center text-slate-500">${i.minStock}</td>
+            <td class="py-3 px-4 text-center font-extrabold text-blue-700">+${suggestedQty}</td>
+          </tr>
+        `;
+      }).join("");
+    }
 
-            if (!checkerName) {
-                showToast("Veuillez saisir votre nom ou matricule avant de valider.", "error");
-                checkerInput.focus();
-                return;
-            }
+    // ADMIN ITEM MODAL
+    window.openItemModal = function (id = null) {
+      const modal = document.getElementById("item-modal");
+      const delBtn = document.getElementById("btn-delete-item");
+      if (id) {
+        const item = state.items.find((i) => i.id === id);
+        document.getElementById("modal-title").textContent = "Modifier l'article";
+        document.getElementById("edit-item-id").value = item.id;
+        document.getElementById("edit-compartment").value = item.compartment;
+        document.getElementById("edit-name").value = item.name;
+        document.getElementById("edit-bag-target").value = item.bagTarget;
+        document.getElementById("edit-bag-qty").value = item.bagQty;
+        document.getElementById("edit-reserve-qty").value = item.reserveQty;
+        document.getElementById("edit-min-stock").value = item.minStock;
+        document.getElementById("edit-lot").value = item.lot || "";
+        document.getElementById("edit-expiry").value = item.expiry || "";
+        delBtn.classList.remove("hidden");
+      } else {
+        document.getElementById("modal-title").textContent = "Ajouter un article";
+        document.getElementById("edit-item-id").value = "";
+        document.getElementById("edit-name").value = "";
+        document.getElementById("edit-bag-target").value = 1;
+        document.getElementById("edit-bag-qty").value = 1;
+        document.getElementById("edit-reserve-qty").value = 2;
+        document.getElementById("edit-min-stock").value = 1;
+        document.getElementById("edit-lot").value = "";
+        document.getElementById("edit-expiry").value = "";
+        delBtn.classList.add("hidden");
+      }
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    };
 
-            checklistState.lastValidated = new Date().toISOString();
-            checklistState.lastChecker = checkerName;
-            checklistState.lastNote = noteInput.value.trim();
+    window.closeItemModal = function () {
+      document.getElementById("item-modal").classList.add("hidden");
+      document.getElementById("item-modal").classList.remove("flex");
+    };
 
-            movements.unshift({
-                id: 'mov_' + Date.now(),
-                date: new Date().toISOString(),
-                itemId: 'CHECK_SAC',
-                itemName: 'Contrôle complet Lot de secours Romagnat (Bagheera)',
-                category: 'Vérification',
-                type: 'REARM',
-                qty: items.length,
-                operator: checkerName,
-                note: checklistState.lastNote || 'Vérification périodique validée'
-            });
+    window.saveItemModal = async function () {
+      const id = document.getElementById("edit-item-id").value;
+      const payload = {
+        id: id || "custom-" + Date.now(),
+        compartment: document.getElementById("edit-compartment").value,
+        name: document.getElementById("edit-name").value.trim(),
+        bagTarget: parseInt(document.getElementById("edit-bag-target").value) || 0,
+        bagQty: parseInt(document.getElementById("edit-bag-qty").value) || 0,
+        reserveQty: parseInt(document.getElementById("edit-reserve-qty").value) || 0,
+        minStock: parseInt(document.getElementById("edit-min-stock").value) || 0,
+        lot: document.getElementById("edit-lot").value.trim(),
+        expiry: document.getElementById("edit-expiry").value
+      };
+      if (!payload.name) return alert("Nom obligatoire.");
+      if (id) {
+        const idx = state.items.findIndex((i) => i.id === id);
+        if (idx !== -1) state.items[idx] = payload;
+      } else {
+        state.items.push(payload);
+      }
+      closeItemModal();
+      await persistState();
+    };
 
-            refreshAllViews();
-            await persistAllState();
-            showToast(`Contrôle validé et enregistré par ${checkerName} !`, "success");
-        };
+    window.deleteCurrentItem = async function () {
+      const id = document.getElementById("edit-item-id").value;
+      if (!id || !confirm("Supprimer définitivement cet article ?")) return;
+      state.items = state.items.filter((i) => i.id !== id);
+      closeItemModal();
+      await persistState();
+    };
 
-        // =========================================================
-        // VUE 3 : MOUVEMENTS & JOURNAL (RESPONSABLE)
-        // =========================================================
-        function populateMovementItemSelect() {
-            const select = document.getElementById('movItem');
-            if (!select) return;
-            const currentVal = select.value;
-            select.innerHTML = items.map(i => `<option value="${i.id}">[${i.category}] ${i.name} (Sac: ${i.lotCurrent} | Rés: ${i.reserve})</option>`).join('');
-            if (currentVal && items.some(i => i.id === currentVal)) select.value = currentVal;
-        }
+    // ADMIN SETTINGS & EXPORTS
+    window.updateAdminPin = async function () {
+      const newPin = document.getElementById("new-pin-input").value.trim();
+      if (newPin.length < 4) return alert("Le code PIN doit contenir au moins 4 chiffres.");
+      state.adminPin = newPin;
+      document.getElementById("new-pin-input").value = "";
+      await persistState();
+      alert("Code PIN Responsable mis à jour !");
+    };
 
-        window.toggleMovementFields = function() {
-            const type = document.getElementById('movType').value;
-            const sourceBox = document.getElementById('movSourceBox');
-            const restockFields = document.getElementById('movRestockFields');
+    window.resetDefaultCatalog = async function () {
+      if (!confirm("Restaurer la dotation d'origine du sac Bagheera (52 articles) ?")) return;
+      state.items = JSON.parse(JSON.stringify(INITIAL_ITEMS));
+      await persistState();
+    };
 
-            if (type === 'REARM') {
-                sourceBox.classList.add('hidden');
-                restockFields.classList.add('hidden');
-            } else if (type === 'IN_RESTOCK') {
-                sourceBox.classList.add('hidden');
-                restockFields.classList.remove('hidden');
-            } else {
-                sourceBox.classList.remove('hidden');
-                restockFields.classList.add('hidden');
-            }
-        };
+    window.copyOrderToClipboard = function () {
+      const toOrder = state.items.filter((i) => i.reserveQty <= i.minStock || getExpiryStatus(i.expiry) !== "ok");
+      if (!toOrder.length) return alert("Aucun article à commander.");
+      const lines = ["COMMANDE PHARMACIE — CASERNE DE ROMAGNAT", "----------------------------------------"];
+      toOrder.forEach((i) => {
+        const qty = Math.max(1, i.minStock * 2 - i.reserveQty);
+        lines.push(`- ${i.name} (${i.compartment}) : +${qty} unité(s) [Stock actuel: ${i.reserveQty}]`);
+      });
+      navigator.clipboard.writeText(lines.join("
+"));
+      alert("Liste de commande copiée dans le presse-papiers !");
+    };
 
-        window.handleMovementSubmit = async function(event) {
-            event.preventDefault();
-            const type = document.getElementById('movType').value;
-            const itemId = document.getElementById('movItem').value;
-            const location = document.getElementById('movLocation').value;
-            const qty = parseInt(document.getElementById('movQty').value, 10);
-            const operator = document.getElementById('movOperator').value.trim();
-            const note = document.getElementById('movNote').value.trim();
+    window.exportMovementsCSV = function () {
+      const rows = [["Date", "Type", "Article", "Quantite", "Intervenant"]];
+      state.movements.forEach((m) => rows.push([m.date, m.type, `"${m.item}"`, m.qty, `"${m.agent}"`]));
+      const csv = rows.map((r) => r.join(";")).join("
+");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "historique_pharmacie_romagnat.csv";
+      a.click();
+    };
 
-            const item = items.find(i => i.id === itemId);
-            if (!item || qty <= 0) return;
+    window.exportBackupJSON = function () {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "sauvegarde_romagnat.json";
+      a.click();
+    };
 
-            if (type === 'OUT_INTER' || type === 'OUT_EXPIRED') {
-                if (location === 'LOT') {
-                    if (item.lotCurrent < qty) {
-                        showToast(`Quantité insuffisante dans le sac (dispo : ${item.lotCurrent}).`, "error");
-                        return;
-                    }
-                    item.lotCurrent -= qty;
-                } else {
-                    if (item.reserve < qty) {
-                        showToast(`Quantité insuffisante en réserve (dispo : ${item.reserve}).`, "error");
-                        return;
-                    }
-                    item.reserve -= qty;
-                }
-            } else if (type === 'REARM') {
-                if (item.reserve < qty) {
-                    showToast(`Réserve insuffisante pour réarmer (dispo : ${item.reserve}).`, "error");
-                    return;
-                }
-                item.reserve -= qty;
-                item.lotCurrent += qty;
-            } else if (type === 'IN_RESTOCK') {
-                item.reserve += qty;
-                const newBatch = document.getElementById('movNewBatch').value.trim();
-                const newExpiry = document.getElementById('movNewExpiry').value;
-                if (newBatch) item.batch = newBatch;
-                if (newExpiry) item.expiry = newExpiry;
-            }
+    // QR CODE GENERATOR
+    window.savePublicUrl = async function () {
+      const url = document.getElementById("public-url-input").value.trim();
+      if (!url) return;
+      state.publicUrl = url;
+      await persistState();
+      generateQRCode();
+    };
 
-            movements.unshift({
-                id: 'mov_' + Date.now(),
-                date: new Date().toISOString(),
-                itemId: item.id,
-                itemName: item.name,
-                category: item.category,
-                type: type,
-                qty: qty,
-                operator: operator,
-                note: note || (location === 'LOT' ? 'Sac de secours' : 'Réserve pharmacie')
-            });
+    function generateQRCode() {
+      const input = document.getElementById("public-url-input");
+      if (!input.value) input.value = state.publicUrl || window.location.href.split("?")[0];
+      const baseUrl = input.value.trim().split("?")[0];
+      const targetUrl = `${baseUrl}?view=verif`;
+      document.getElementById("qr-url-caption").textContent = targetUrl;
 
-            document.getElementById('movQty').value = 1;
-            document.getElementById('movNote').value = '';
-            document.getElementById('movNewBatch').value = '';
-            document.getElementById('movNewExpiry').value = '';
+      const box = document.getElementById("qrcode-box");
+      box.innerHTML = "";
+      new QRCode(box, {
+        text: targetUrl,
+        width: 220,
+        height: 220,
+        colorDark: "#0f172a",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
 
-            refreshAllViews();
-            await persistAllState();
-            showToast("Mouvement enregistré.", "success");
-        };
+    function renderAll() {
+      renderChecklist();
+      renderStocks();
+      renderMovements();
+      renderOrders();
+      lucide.createIcons();
+    }
 
-        function renderMovements() {
-            const container = document.getElementById('movementsList');
-            if (!container) return;
-
-            if (movements.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 text-center py-8">Aucun mouvement enregistré pour le moment.</p>`;
-                return;
-            }
-
-            const badges = {
-                'OUT_INTER': { label: 'Sortie Inter', cls: 'bg-fire-100 text-fire-700 dark:bg-fire-950 dark:text-fire-300', sign: '-' },
-                'OUT_EXPIRED': { label: 'Péremption', cls: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300', sign: '-' },
-                'REARM': { label: 'Réarmement / Contrôle', cls: 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300', sign: '' },
-                'IN_RESTOCK': { label: 'Entrée Stock', cls: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300', sign: '+' }
-            };
-
-            container.innerHTML = movements.map(m => {
-                const b = badges[m.type] || badges['OUT_INTER'];
-                const d = new Date(m.date);
-                const dateStr = d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-
-                return `
-                <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
-                    <div class="min-w-0">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md ${b.cls}">${b.label}</span>
-                            <span class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">${m.itemName}</span>
-                        </div>
-                        <p class="text-xs text-slate-500 mt-1">
-                            Par <strong class="text-slate-700 dark:text-slate-300">${m.operator}</strong> &bull; ${m.note}
-                        </p>
-                    </div>
-                    <div class="text-right shrink-0">
-                        <span class="block text-sm font-extrabold text-slate-900 dark:text-white">${b.sign}${m.qty}</span>
-                        <span class="text-[11px] text-slate-400">${dateStr}</span>
-                    </div>
-                </div>
-                `;
-            }).join('');
-        }
-
-        // =========================================================
-        // VUE 4 : BON DE COMMANDE AUTOMATIQUE (RESPONSABLE)
-        // =========================================================
-        function renderOrders() {
-            const container = document.getElementById('orderListContainer');
-            if (!container) return;
-
-            const toOrder = items.filter(i => isLowStock(i) || getExpiryStatus(i.expiry).isAlert);
-
-            if (toOrder.length === 0) {
-                container.innerHTML = `
-                <div class="bg-white dark:bg-slate-900 p-8 rounded-2xl border border-slate-200 dark:border-slate-800 text-center">
-                    <i data-lucide="check-circle-2" class="w-10 h-10 mx-auto text-emerald-500 mb-2"></i>
-                    <p class="text-sm font-bold text-slate-800 dark:text-slate-200">Aucune commande requise</p>
-                    <p class="text-xs text-slate-500 mt-1">Tous les articles du Lot de secours Romagnat sont au-dessus des seuils.</p>
-                </div>`;
-                if (typeof lucide !== 'undefined') lucide.createIcons();
-                return;
-            }
-
-            container.innerHTML = toOrder.map(item => {
-                const expStatus = getExpiryStatus(item.expiry);
-                const recommended = Math.max((item.minThreshold * 2) - getTotalStock(item), item.lotTarget, 1);
-                const qtyVal = customOrderQuantities[item.id] !== undefined ? customOrderQuantities[item.id] : recommended;
-
-                return `
-                <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div class="space-y-1">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">${item.category}</span>
-                            ${isLowStock(item) ? `<span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-fire-100 text-fire-700">Stock Bas (${getTotalStock(item)}/${item.minThreshold})</span>` : ''}
-                            ${expStatus.isAlert ? `<span class="px-2 py-0.5 text-[11px] font-bold rounded-md bg-amber-100 text-amber-800">${expStatus.label}</span>` : ''}
-                        </div>
-                        <h4 class="text-sm font-bold text-slate-900 dark:text-white">${item.name}</h4>
-                        <p class="text-xs text-slate-500">Fournisseur : <strong>${item.supplier || 'Pharmacie SDIS'}</strong></p>
-                    </div>
-                    <div class="flex items-center gap-2 shrink-0">
-                        <label class="text-xs font-semibold text-slate-500">Qté à commander :</label>
-                        <input type="number" min="1" value="${qtyVal}" onchange="updateOrderQty('${item.id}', this.value)" class="w-20 px-3 py-2 text-sm font-extrabold text-center rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800">
-                    </div>
-                </div>
-                `;
-            }).join('');
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        window.updateOrderQty = function(id, val) {
-            customOrderQuantities[id] = Math.max(1, parseInt(val, 10) || 1);
-        };
-
-        window.copyOrderToClipboard = function() {
-            const toOrder = items.filter(i => isLowStock(i) || getExpiryStatus(i.expiry).isAlert);
-            if (toOrder.length === 0) {
-                showToast("Aucun article à commander.", "info");
-                return;
-            }
-            const dateStr = new Date().toLocaleDateString('fr-FR');
-            let text = `COMMANDE PHARMACIE CASERNE - LOT DE SECOURS ROMAGNAT (${dateStr})\n--------------------------------------------------\n`;
-            toOrder.forEach(item => {
-                const qty = customOrderQuantities[item.id] !== undefined ? customOrderQuantities[item.id] : Math.max((item.minThreshold * 2) - getTotalStock(item), item.lotTarget, 1);
-                text += `- [${item.category}] ${item.name} : Qté ${qty} (${item.supplier || 'Pharmacie SDIS'})\n`;
-            });
-
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            document.body.appendChild(ta);
-            ta.select();
-            document.execCommand('copy');
-            document.body.removeChild(ta);
-            showToast("Liste de commande copiée !", "success");
-        };
-
-        window.exportOrderCSV = function() {
-            const toOrder = items.filter(i => isLowStock(i) || getExpiryStatus(i.expiry).isAlert);
-            if (toOrder.length === 0) return;
-            const rows = [['Trousse', 'Article', 'Stock Actuel', 'Seuil Mini', 'Quantite Commandee', 'Fournisseur']];
-            toOrder.forEach(i => {
-                const qty = customOrderQuantities[i.id] !== undefined ? customOrderQuantities[i.id] : Math.max((i.minThreshold * 2) - getTotalStock(i), i.lotTarget, 1);
-                rows.push([`"${i.category}"`, `"${i.name}"`, getTotalStock(i), i.minThreshold, qty, `"${i.supplier || 'Pharmacie SDIS'}"`]);
-            });
-            downloadCSV(rows, `commande_romagnat_${new Date().toISOString().slice(0, 10)}.csv`);
-        };
-
-        window.exportMovementsCSV = function() {
-            if (movements.length === 0) return;
-            const rows = [['Date', 'Type', 'Trousse', 'Article', 'Quantite', 'Intervenant', 'Note']];
-            movements.forEach(m => {
-                rows.push([`"${new Date(m.date).toLocaleString('fr-FR')}"`, `"${m.type}"`, `"${m.category}"`, `"${m.itemName}"`, m.qty, `"${m.operator}"`, `"${m.note}"`]);
-            });
-            downloadCSV(rows, `mouvements_romagnat_${new Date().toISOString().slice(0, 10)}.csv`);
-        };
-
-        function downloadCSV(rows, filename) {
-            const csvContent = "data:text/csv;charset=utf-8,\uFEFF" + rows.map(e => e.join(";")).join("\n");
-            const link = document.createElement("a");
-            link.setAttribute("href", encodeURI(csvContent));
-            link.setAttribute("download", filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // =========================================================
-        // VUE 5 : GÉNÉRATION QR CODE CAMION & PARTAGE MULTI-APPAREILS
-        // =========================================================
-        function resolveBaseShareUrl() {
-            const inputEl = document.getElementById('publicBaseUrlInput');
-            const alertBox = document.getElementById('urlEnvAlertBox');
-            const typedUrl = inputEl ? inputEl.value.trim() : '';
-
-            if (typedUrl && /^https?:\/\//i.test(typedUrl)) {
-                if (alertBox) alertBox.classList.add('hidden');
-                return typedUrl.replace(/\/$/, '');
-            }
-
-            if (publicBaseUrl && /^https?:\/\//i.test(publicBaseUrl)) {
-                if (alertBox) alertBox.classList.add('hidden');
-                return publicBaseUrl.replace(/\/$/, '');
-            }
-
-            const loc = window.location;
-            const isPublicHttp = (loc.protocol === 'http:' || loc.protocol === 'https:') &&
-                                 loc.hostname !== 'localhost' &&
-                                 loc.hostname !== '127.0.0.1' &&
-                                 !loc.hostname.includes('usercontent') &&
-                                 !loc.hostname.includes('webcontainer');
-
-            if (isPublicHttp) {
-                if (alertBox) alertBox.classList.add('hidden');
-                return loc.origin + loc.pathname;
-            }
-
-            if (alertBox) alertBox.classList.remove('hidden');
-            return 'https://romagnat-secours.netlify.app';
-        }
-
-        window.savePublicBaseUrl = async function() {
-            const inputEl = document.getElementById('publicBaseUrlInput');
-            if (!inputEl) return;
-            const val = inputEl.value.trim();
-            if (!val || !/^https?:\/\//i.test(val)) {
-                showToast("Veuillez saisir une adresse valide commençant par https://", "error");
-                inputEl.focus();
-                return;
-            }
-            publicBaseUrl = val.replace(/\/$/, '');
-            generateTruckQRCode();
-            await persistAllState();
-            showToast("URL publique enregistrée ! Votre QR Code est prêt à être scanné.", "success");
-        };
-
-        window.generateTruckQRCode = function() {
-            const box = document.getElementById('qrcodeCanvasBox');
-            const urlInput = document.getElementById('shareUrlInput');
-            const modeSelect = document.getElementById('qrTargetMode');
-            if (!box || !urlInput) return;
-
-            const baseUrl = resolveBaseShareUrl();
-            const mode = modeSelect ? modeSelect.value : 'verif';
-            const fullUrl = `${baseUrl}?view=${mode}`;
-            urlInput.value = fullUrl;
-
-            box.innerHTML = '';
-            if (typeof QRCode !== 'undefined') {
-                new QRCode(box, {
-                    text: fullUrl,
-                    width: 210,
-                    height: 210,
-                    colorDark: "#0f172a",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            }
-        };
-
-        window.copyShareUrl = function() {
-            const urlInput = document.getElementById('shareUrlInput');
-            if (!urlInput) return;
-            urlInput.select();
-            document.execCommand('copy');
-            showToast("Lien du QR Code copié dans le presse-papiers !", "success");
-        };
-
-        window.testQrDestination = function() {
-            const urlInput = document.getElementById('shareUrlInput');
-            if (!urlInput || !urlInput.value) return;
-            window.open(urlInput.value, '_blank', 'noopener,noreferrer');
-        };
-
-        // =========================================================
-        // MODALE AJOUT / ÉDITION D'ARTICLE (MODE RESPONSABLE)
-        // =========================================================
-        window.openItemModal = function(itemId = null) {
-            if (!isAdminUnlocked) {
-                toggleAdminMode();
-                return;
-            }
-            const modal = document.getElementById('itemModal');
-            const title = document.getElementById('modalTitle');
-            const delBtn = document.getElementById('deleteItemBtn');
-
-            if (itemId) {
-                const item = items.find(i => i.id === itemId);
-                if (!item) return;
-                title.textContent = "Modifier l'article";
-                document.getElementById('editItemId').value = item.id;
-                document.getElementById('itemName').value = item.name;
-                document.getElementById('itemCategory').value = item.category;
-                document.getElementById('itemSupplier').value = item.supplier || '';
-                document.getElementById('itemLotTarget').value = item.lotTarget;
-                document.getElementById('itemLotCurrent').value = item.lotCurrent;
-                document.getElementById('itemReserve').value = item.reserve;
-                document.getElementById('itemMinThreshold').value = item.minThreshold;
-                document.getElementById('itemBatch').value = item.batch || '';
-                document.getElementById('itemExpiry').value = item.expiry || '';
-                delBtn.classList.remove('hidden');
-            } else {
-                title.textContent = "Ajouter un article à la pharmacie";
-                document.getElementById('editItemId').value = '';
-                document.getElementById('itemForm').reset();
-                document.getElementById('itemLotTarget').value = 1;
-                document.getElementById('itemLotCurrent').value = 1;
-                document.getElementById('itemReserve').value = 2;
-                document.getElementById('itemMinThreshold').value = 2;
-                delBtn.classList.add('hidden');
-            }
-
-            modal.classList.remove('hidden');
-        };
-
-        window.closeItemModal = function() {
-            document.getElementById('itemModal').classList.add('hidden');
-        };
-
-        window.handleItemSave = async function(event) {
-            event.preventDefault();
-            const id = document.getElementById('editItemId').value;
-            const payload = {
-                name: document.getElementById('itemName').value.trim(),
-                category: document.getElementById('itemCategory').value,
-                supplier: document.getElementById('itemSupplier').value.trim(),
-                lotTarget: parseInt(document.getElementById('itemLotTarget').value, 10) || 0,
-                lotCurrent: parseInt(document.getElementById('itemLotCurrent').value, 10) || 0,
-                reserve: parseInt(document.getElementById('itemReserve').value, 10) || 0,
-                minThreshold: parseInt(document.getElementById('itemMinThreshold').value, 10) || 0,
-                batch: document.getElementById('itemBatch').value.trim(),
-                expiry: document.getElementById('itemExpiry').value
-            };
-
-            if (id) {
-                const idx = items.findIndex(i => i.id === id);
-                if (idx !== -1) items[idx] = { ...items[idx], ...payload };
-                showToast("Article mis à jour.", "success");
-            } else {
-                items.push({ id: 'bg_' + Date.now(), ...payload });
-                showToast("Article ajouté.", "success");
-            }
-
-            closeItemModal();
-            refreshAllViews();
-            await persistAllState();
-        };
-
-        window.deleteCurrentItem = async function() {
-            const id = document.getElementById('editItemId').value;
-            if (!id) return;
-            items = items.filter(i => i.id !== id);
-            closeItemModal();
-            refreshAllViews();
-            await persistAllState();
-            showToast("Article supprimé.", "info");
-        };
-
-        // =========================================================
-        // SAUVEGARDE / RESTAURATION FICHIER JSON
-        // =========================================================
-        window.exportDataJSON = function() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({
-                items,
-                movements,
-                checklistState,
-                adminPin,
-                publicBaseUrl
-            }, null, 2));
-            const link = document.createElement("a");
-            link.setAttribute("href", dataStr);
-            link.setAttribute("download", `sauvegarde_romagnat_${new Date().toISOString().slice(0, 10)}.json`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Fichier de sauvegarde téléchargé.", "success");
-        };
-
-        window.importDataJSON = function(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                try {
-                    const parsed = JSON.parse(e.target.result);
-                    if (Array.isArray(parsed.items)) {
-                        items = parsed.items;
-                        movements = Array.isArray(parsed.movements) ? parsed.movements : [];
-                        if (parsed.checklistState) checklistState = parsed.checklistState;
-                        if (parsed.adminPin) adminPin = parsed.adminPin;
-                        if (parsed.publicBaseUrl) {
-                            publicBaseUrl = parsed.publicBaseUrl;
-                            const urlInput = document.getElementById('publicBaseUrlInput');
-                            if (urlInput) urlInput.value = publicBaseUrl;
-                        }
-                        refreshAllViews();
-                        generateTruckQRCode();
-                        await persistAllState();
-                        showToast("Sauvegarde restaurée avec succès !", "success");
-                    }
-                } catch (err) {
-                    showToast("Fichier JSON invalide.", "error");
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = '';
-        };
-
-        // =========================================================
-        // TOAST NOTIFICATIONS
-        // =========================================================
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            const colors = {
-                success: 'bg-emerald-600 text-white',
-                error: 'bg-fire-600 text-white',
-                info: 'bg-slate-900 text-white dark:bg-slate-800'
-            };
-            const toast = document.createElement('div');
-            toast.className = `${colors[type] || colors.info} px-4 py-3 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 transition-all duration-300 transform translate-y-2 opacity-0`;
-            toast.textContent = message;
-            container.appendChild(toast);
-
-            requestAnimationFrame(() => {
-                toast.classList.remove('translate-y-2', 'opacity-0');
-            });
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Lancement au chargement de la page
-        window.addEventListener('DOMContentLoaded', initApp);
-    </script>
+    // INIT
+    renderAll();
+    generateQRCode();
+  </script>
 </body>
 </html>
