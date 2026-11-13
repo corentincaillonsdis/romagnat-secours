@@ -1,589 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PharmaSecours — Espace Opérationnel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    #sidebar {
-      width: 16rem;
-      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    #sidebar.collapsed {
-      width: 4.5rem;
-    }
-    #sidebar.collapsed .sidebar-text {
-      display: none;
-    }
-    #sidebar.collapsed .sidebar-header-inner {
-      justify-content: center;
-    }
-    #sidebar.collapsed .nav-btn {
-      justify-content: center;
-      padding-left: 0;
-      padding-right: 0;
-    }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmbuPilot — Espace de gestion</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#101a2e;--red:#e52b2b;--muted:#64748b}*{box-sizing:border-box}body{font-family:Inter,system-ui,sans-serif;background:#f1f5f9;color:#0f172a}#sidebar{width:254px;transition:width .25s;flex-shrink:0}#sidebar.collapsed{width:76px}#sidebar.collapsed .nav-label,#sidebar.collapsed .brand-copy,#sidebar.collapsed .side-foot{display:none}#sidebar.collapsed .nav-link{justify-content:center;padding-left:0;padding-right:0}#sidebar.collapsed .brand{justify-content:center}.nav-link{display:flex;align-items:center;gap:12px;width:100%;padding:11px 13px;border-radius:12px;font-size:12px;font-weight:700;color:#cbd5e1;transition:.18s;text-align:left}.nav-link:hover{background:#1e293b;color:white}.nav-link.active{background:white;color:#101a2e;box-shadow:0 2px 8px #02061720}.nav-link i{width:17px;height:17px;flex-shrink:0}.card{background:white;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 1px 2px #0f172a05}.eyebrow{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#94a3b8}.kpi{padding:18px}.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:800}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:10px 14px;font-size:11px;font-weight:800;transition:.18s}.btn-red{background:#e52b2b;color:white}.btn-red:hover{background:#c91e1e}.btn-light{background:#f1f5f9;color:#334155}.btn-light:hover{background:#e2e8f0}.section-title{font-size:15px;font-weight:850;letter-spacing:-.02em}.field{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px 12px;font-size:12px;background:white;outline:none}.field:focus{border-color:#64748b;box-shadow:0 0 0 3px #64748b18}.tag{font-size:10px;font-weight:800;border-radius:8px;padding:5px 8px}.table-row{display:grid;grid-template-columns:1.3fr 1fr 1fr .8fr;gap:12px;align-items:center;padding:13px 16px;border-top:1px solid #f1f5f9;font-size:11px}.hero{background:linear-gradient(110deg,rgba(12,23,42,.97),rgba(19,34,57,.88) 55%,rgba(40,28,44,.72)),url('https://images.unsplash.com/photo-1587745416684-47953f16f02f?auto=format&fit=crop&w=1800&q=85') center 48%/cover;border:1px solid #27364d}.mobile-menu{display:none}@media(max-width:900px){#sidebar{width:76px}#sidebar .nav-label,#sidebar .brand-copy,#sidebar .side-foot{display:none}#sidebar .nav-link{justify-content:center;padding-left:0;padding-right:0}.main-pad{padding:18px!important}.hero-inner{align-items:flex-start!important}.desktop-date{display:none}}@media(max-width:640px){#sidebar{width:62px}#sidebar .brand{justify-content:center;padding-left:8px;padding-right:8px}.hero{padding:22px!important}.hero-inner{display:block!important}.hero-actions{margin-top:18px}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.content-grid{grid-template-columns:1fr!important}.table-row{grid-template-columns:1.2fr 1fr .8fr}.table-row>*:nth-child(3){display:none}}
+</style>
 </head>
-<body class="bg-slate-100 text-slate-900 min-h-screen flex overflow-x-hidden">
-
-  <!-- ===================================================================== -->
-  <!-- VOLET LATÉRAL GAUCHE RÉTRACTABLE                                      -->
-  <!-- ===================================================================== -->
-  <aside id="sidebar" class="bg-slate-900 text-white flex flex-col shrink-0 min-h-screen sticky top-0 z-30 select-none shadow-xl">
-    
-    <!-- HAUT DU VOLET : LOGO + NOM + BOUTON RÉTRACTER -->
-    <div class="h-16 px-4 border-b border-slate-800 flex items-center justify-between gap-2 sidebar-header-inner">
-      <div class="flex items-center gap-3 overflow-hidden sidebar-text">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shrink-0 shadow-md">
-          <i data-lucide="cross" class="w-5 h-5 text-white"></i>
-        </div>
-        <div class="truncate">
-          <span id="site-name-label" class="font-extrabold text-sm tracking-tight block truncate">PharmaSecours</span>
-          <span class="text-[10px] text-slate-400 block truncate">Gestion Flotte & Pharmacie</span>
-        </div>
-      </div>
-
-      <button onclick="toggleSidebar()" id="btn-toggle-sidebar" title="Réduire / Agrandir le menu"
-        class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition shrink-0">
-        <i data-lucide="panel-left-close" id="icon-toggle-sidebar" class="w-5 h-5"></i>
-      </button>
-    </div>
-
-    <!-- MENU DE NAVIGATION -->
-    <nav id="sidebar-nav" class="flex-1 p-3 space-y-1.5 overflow-y-auto"></nav>
-
-    <!-- BAS DU VOLET -->
-    <div class="p-3 border-t border-slate-800 text-[11px] text-slate-400 sidebar-text flex items-center justify-between">
-      <span>Poste Opérationnel</span>
-      <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
-        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Actif
-      </span>
-    </div>
-  </aside>
-
-  <!-- ===================================================================== -->
-  <!-- CONTENU PRINCIPAL À DROITE                                            -->
-  <!-- ===================================================================== -->
-  <div class="flex-1 flex flex-col min-w-0">
-
-    <!-- BARRE SUPÉRIEURE -->
-    <header class="h-16 bg-white/90 backdrop-blur-md border-b border-slate-200 px-6 flex items-center justify-between sticky top-0 z-20">
-      <div class="flex items-center gap-3">
-        <button onclick="toggleSidebar()" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 transition" title="Afficher/Masquer le volet">
-          <i data-lucide="menu" class="w-5 h-5"></i>
-        </button>
-        <div id="breadcrumb" class="text-sm font-bold text-slate-700 flex items-center gap-2">
-          <span>Accueil</span>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <span id="current-date-badge" class="hidden sm:inline-flex items-center gap-2 text-xs font-semibold text-slate-600 bg-slate-100 px-3.5 py-1.5 rounded-xl border border-slate-200/60"></span>
-      </div>
-    </header>
-
-    <!-- ZONE DES ÉCRANS -->
-    <main class="flex-1 p-6 max-w-6xl w-full mx-auto">
-
-      <!-- ================================================================= -->
-      <!-- ÉCRAN 1 : PAGE D'ACCUEIL VISUELLE & ATTRAYANTE                    -->
-      <!-- ================================================================= -->
-      <section id="screen-accueil" class="space-y-6">
-        
-        <!-- 1. HERO BANNER MODERNE (Dégradé sombre + Actions immédiates) -->
-        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white p-7 sm:p-8 shadow-lg border border-slate-700/60">
-          <!-- Motif décoratif subtil en arrière-plan -->
-          <div class="absolute -right-12 -top-12 w-64 h-64 rounded-full bg-red-600/15 blur-2xl pointer-events-none"></div>
-          <div class="absolute right-24 -bottom-16 w-48 h-48 rounded-full bg-blue-500/10 blur-2xl pointer-events-none"></div>
-
-          <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div class="space-y-2 max-w-xl">
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-slate-200">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                Centre Opérationnel • Prêt au départ
-              </div>
-              <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">
-                Pilotage Parc & Pharmacie
-              </h1>
-              <p class="text-sm text-slate-300 leading-relaxed">
-                Centralisez les vérifications de vos véhicules, suivez l'armement des sacs de secours et anticipez vos réapprovisionnements en temps réel.
-              </p>
-            </div>
-
-            <!-- Boutons d'action principaux -->
-            <div class="flex flex-wrap sm:flex-nowrap gap-3 shrink-0">
-              <button onclick="navigateTo('vehicules')" class="w-full sm:w-auto px-5 py-3.5 bg-red-600 hover:bg-red-500 text-white text-xs font-extrabold rounded-2xl shadow-md shadow-red-950/40 flex items-center justify-center gap-2.5 transition transform hover:-translate-y-0.5">
-                <i data-lucide="clipboard-check" class="w-4 h-4"></i>
-                Contrôler un véhicule
-              </button>
-              <button onclick="navigateTo('pharmacie')" class="w-full sm:w-auto px-5 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/15 text-xs font-extrabold rounded-2xl flex items-center justify-center gap-2.5 transition">
-                <i data-lucide="pill" class="w-4 h-4"></i>
-                Ouvrir la pharmacie
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. 4 CARTES INDICATEURS VISUELLES (KPIs) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div onclick="navigateTo('vehicules')" class="cursor-pointer bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-emerald-400 shadow-xs transition group">
-            <div class="flex items-center justify-between mb-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-105 transition">
-                <i data-lucide="ambulance" class="w-5 h-5"></i>
-              </div>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">100 %</span>
-            </div>
-            <p class="text-2xl font-black text-slate-900">2 / 2</p>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Véhicules opérationnels</p>
-          </div>
-
-          <div onclick="navigateTo('vehicules')" class="cursor-pointer bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-blue-400 shadow-xs transition group">
-            <div class="flex items-center justify-between mb-3">
-              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition">
-                <i data-lucide="shield-check" class="w-5 h-5"></i>
-              </div>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">À jour</span>
-            </div>
-            <p class="text-2xl font-black text-slate-900">Prêt</p>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Armement & sacs contrôlés</p>
-          </div>
-
-          <div onclick="navigateTo('pharmacie')" class="cursor-pointer bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-amber-400 shadow-xs transition group">
-            <div class="flex items-center justify-between mb-3">
-              <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center group-hover:scale-105 transition">
-                <i data-lucide="package-search" class="w-5 h-5"></i>
-              </div>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">À surveiller</span>
-            </div>
-            <p class="text-2xl font-black text-slate-900">2 réf.</p>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Réserve pharmacie basse</p>
-          </div>
-
-          <div onclick="navigateTo('pharmacie')" class="cursor-pointer bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-red-400 shadow-xs transition group">
-            <div class="flex items-center justify-between mb-3">
-              <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center group-hover:scale-105 transition">
-                <i data-lucide="calendar-clock" class="w-5 h-5"></i>
-              </div>
-              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800">&lt; 3 mois</span>
-            </div>
-            <p class="text-2xl font-black text-slate-900">1 lot</p>
-            <p class="text-xs font-semibold text-slate-500 mt-0.5">Péremption proche</p>
-          </div>
-        </div>
-
-        <!-- 3. GRILLE PRINCIPALE : PARC VÉHICULES + ACTIVITÉ & CONSIGNES -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          <!-- Colonne Gauche (2/3) -->
-          <div class="lg:col-span-2 space-y-6">
-            
-            <!-- Cartes Véhicules en direct -->
-            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-2 h-5 rounded-full bg-red-600"></div>
-                  <h2 class="text-base font-extrabold text-slate-900">Disponibilité des Ambulances</h2>
-                </div>
-                <button onclick="navigateTo('vehicules')" class="text-xs font-bold text-slate-500 hover:text-slate-900 flex items-center gap-1 transition">
-                  Tout afficher <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-                </button>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="home-vehicles-summary"></div>
-            </div>
-
-            <!-- Fil d'activité récent -->
-            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs">
-              <div class="flex items-center justify-between mb-4">
-                <div class="flex items-center gap-2.5">
-                  <div class="w-2 h-5 rounded-full bg-slate-900"></div>
-                  <h2 class="text-base font-extrabold text-slate-900">Activité récente de l'équipe</h2>
-                </div>
-                <span class="text-[11px] font-semibold text-slate-400">Dernières 48h</span>
-              </div>
-
-              <div class="space-y-3">
-                <div class="flex items-start gap-3.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                  <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold text-slate-900">Contrôle complet validé — Ambulance A1</p>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Extérieur, armement cellule et sac de secours vérifiés.</p>
-                  </div>
-                  <span class="text-[11px] font-semibold text-slate-400 whitespace-nowrap">08:15</span>
-                </div>
-
-                <div class="flex items-start gap-3.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                  <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold text-slate-900">Réarmement Sac de secours</p>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Sortie réserve : Biseptine (x1), Compresses (x2).</p>
-                  </div>
-                  <span class="text-[11px] font-semibold text-slate-400 whitespace-nowrap">Hier</span>
-                </div>
-
-                <div class="flex items-start gap-3.5 p-3 rounded-xl bg-slate-50 border border-slate-100">
-                  <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0 mt-0.5">
-                    <i data-lucide="sparkles" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-xs font-bold text-slate-900">Désinfection & Nettoyage — Ambulance A2</p>
-                    <p class="text-[11px] text-slate-500 mt-0.5">Protocole complet cellule sanitaire et brancard.</p>
-                  </div>
-                  <span class="text-[11px] font-semibold text-slate-400 whitespace-nowrap">Hier</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Colonne Droite (1/3) : Consignes & Infos utiles -->
-          <div class="space-y-6">
-            
-            <!-- Encart Consignes -->
-            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-4">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
-                  <i data-lucide="megaphone" class="w-4 h-4"></i>
-                </div>
-                <h2 class="text-base font-extrabold text-slate-900">Consignes & Rappels</h2>
-              </div>
-
-              <div class="space-y-3 text-xs">
-                <div class="p-3.5 rounded-xl bg-slate-50 border-l-4 border-slate-900 text-slate-700 space-y-1">
-                  <p class="font-extrabold text-slate-900">Prise de service</p>
-                  <p class="leading-relaxed">Contrôler systématiquement les niveaux, la pression O2 et la présence du DSA avant toute prise de garde.</p>
-                </div>
-
-                <div class="p-3.5 rounded-xl bg-amber-50/80 border-l-4 border-amber-500 text-amber-950 space-y-1">
-                  <p class="font-extrabold">Retour d'intervention</p>
-                  <p class="leading-relaxed">Déclarer immédiatement tout matériel consommé pour déclencher le réarmement depuis la réserve.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bloc Numéros / Accès utiles personnalisable -->
-            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-3">
-              <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Contacts & Référents</h3>
-              <div class="divide-y divide-slate-100 text-xs">
-                <div class="py-2 flex items-center justify-between">
-                  <span class="font-semibold text-slate-700">Responsable Pharmacie</span>
-                  <span class="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">Poste 102</span>
-                </div>
-                <div class="py-2 flex items-center justify-between">
-                  <span class="font-semibold text-slate-700">Atelier / Parc Auto</span>
-                  <span class="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded">Poste 105</span>
-                </div>
-                <div class="py-2 flex items-center justify-between">
-                  <span class="font-semibold text-slate-700">Régulation / Standard</span>
-                  <span class="font-mono font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">15 / 18</span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ================================================================= -->
-      <!-- ONGLET PHARMACIE                                                  -->
-      <!-- ================================================================= -->
-      <section id="screen-pharmacie" class="hidden space-y-6">
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
-          <h1 class="text-xl font-extrabold text-slate-900">Pharmacie & Réserve</h1>
-          <p class="text-sm text-slate-500 mt-1">Gestion des dotations, lots et dates de péremption.</p>
-          <div class="mt-6 p-8 border-2 border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-500">
-            Emplacement réservé au module Pharmacie complet.
-          </div>
-        </div>
-      </section>
-
-      <!-- ================================================================= -->
-      <!-- ÉCRAN 2 : LISTE DES VÉHICULES (A1, A2...)                         -->
-      <!-- ================================================================= -->
-      <section id="screen-vehicules" class="hidden space-y-6">
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
-          <h1 class="text-xl font-extrabold text-slate-900">Parc Véhicules</h1>
-          <p class="text-sm text-slate-500 mt-1">Sélectionnez une ambulance pour accéder à sa fiche de contrôle.</p>
-        </div>
-        <div id="vehicles-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"></div>
-      </section>
-
-      <!-- ================================================================= -->
-      <!-- ÉCRAN 3 : FICHE DÉTAILLÉE D'UN VÉHICULE (A1, A2...)               -->
-      <!-- ================================================================= -->
-      <section id="screen-vehicle-detail" class="hidden space-y-6">
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
-          <div class="flex items-center gap-4">
-            <button onclick="navigateTo('vehicules')" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition">
-              <i data-lucide="arrow-left" class="w-4 h-4"></i>
-              Retour aux véhicules
-            </button>
-            <div>
-              <h1 id="detail-vehicle-title" class="text-xl font-extrabold text-slate-900">Ambulance A1</h1>
-              <p id="detail-vehicle-subtitle" class="text-xs text-slate-500">Détails véhicule</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-          <div class="border-b border-slate-200 bg-slate-50 px-4 flex overflow-x-auto gap-2">
-            <button onclick="switchVehicleSubtab('exterieur')" id="subtab-btn-exterieur" class="px-4 py-3.5 text-xs font-bold border-b-2 border-slate-900 text-slate-900 whitespace-nowrap">
-              1. Vérification véhicule extérieur
-            </button>
-            <button onclick="switchVehicleSubtab('armement')" id="subtab-btn-armement" class="px-4 py-3.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
-              2. Armement ambulance et sac de secours
-            </button>
-            <button onclick="switchVehicleSubtab('nettoyage')" id="subtab-btn-nettoyage" class="px-4 py-3.5 text-xs font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap">
-              3. Nettoyage
-            </button>
-          </div>
-
-          <div class="p-6">
-            <div id="subview-exterieur" class="space-y-4">
-              <h2 class="text-base font-extrabold text-slate-900">Vérification véhicule extérieur</h2>
-              <div id="checklist-exterieur" class="space-y-2"></div>
-            </div>
-            <div id="subview-armement" class="hidden space-y-4">
-              <h2 class="text-base font-extrabold text-slate-900">Armement ambulance et sac de secours</h2>
-              <div id="checklist-armement" class="space-y-2"></div>
-            </div>
-            <div id="subview-nettoyage" class="hidden space-y-4">
-              <h2 class="text-base font-extrabold text-slate-900">Nettoyage & Désinfection</h2>
-              <div id="checklist-nettoyage" class="space-y-2"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================================================================= -->
-      <!-- ÉCRANS LIBRES                                                     -->
-      <!-- ================================================================= -->
-      <section id="screen-custom" class="hidden space-y-6">
-        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs">
-          <h1 id="custom-screen-title" class="text-xl font-extrabold text-slate-900">Onglet Libre</h1>
-          <p class="text-sm text-slate-500 mt-1">Espace prêt à être complété selon vos besoins.</p>
-          <div class="mt-6 p-10 border-2 border-dashed border-slate-300 rounded-xl text-center text-xs text-slate-500">
-            Zone vierge à personnaliser.
-          </div>
-        </div>
-      </section>
-
-    </main>
-  </div>
-
-  <!-- ===================================================================== -->
-  <!-- CONFIGURATION ET SCRIPTS                                              -->
-  <!-- ===================================================================== -->
-  <script>
-    const CONFIG = {
-      siteName: "PharmaSecours",
-      menuTabs: [
-        { id: "accueil",   label: "Accueil",        icon: "home" },
-        { id: "pharmacie", label: "Pharmacie",      icon: "pill" },
-        { id: "vehicules", label: "Véhicules",      icon: "ambulance" },
-        { id: "libre1",    label: "Onglet libre 1", icon: "folder", isCustom: true },
-        { id: "libre2",    label: "Onglet libre 2", icon: "folder", isCustom: true }
-      ],
-      vehicles: [
-        { id: "a1", code: "A1", name: "Ambulance 1", plate: "AA-123-BB", status: "Opérationnel", lastCheck: "Aujourd'hui • 08:15" },
-        { id: "a2", code: "A2", name: "Ambulance 2", plate: "CC-456-DD", status: "Opérationnel", lastCheck: "Hier • 14:20" }
-      ],
-      vehicleChecklistTemplate: {
-        exterieur: [
-          "Carrosserie / Absence de nouveaux chocs",
-          "Pneumatiques (état et pression visuelle)",
-          "Feux de position, croisement, route et clignotants",
-          "Gyrophares / Rampe lumineuse et avertisseur sonore",
-          "Niveaux (huile, liquide de refroidissement, lave-glace) et carburant"
-        ],
-        armement: [
-          "Brancard principal et sangles de sécurité",
-          "Chaise portoir",
-          "Bouteille d'oxygène fixe + bouteille portable",
-          "Aspirateur de mucosités + sondes",
-          "Défibrillateur (DSA) + électrodes",
-          "Sac de secours complet (trousses verte, rouge, noire, bleue, orange)"
-        ],
-        nettoyage: [
-          "Désinfection du brancard et des surfaces de contact",
-          "Nettoyage du sol de la cellule sanitaire",
-          "Vidage des poubelles et sac DASRI",
-          "Nettoyage du poste de conduite (volant, poignées)"
-        ]
-      }
-    };
-
-    let currentTab = "accueil";
-    let selectedVehicle = null;
-
-    document.getElementById("site-name-label").textContent = CONFIG.siteName;
-    document.getElementById("current-date-badge").textContent = new Date().toLocaleDateString("fr-FR", {
-      weekday: "long", day: "numeric", month: "long", year: "numeric"
-    });
-
-    window.toggleSidebar = function () {
-      const sidebar = document.getElementById("sidebar");
-      const icon = document.getElementById("icon-toggle-sidebar");
-      sidebar.classList.toggle("collapsed");
-      icon.setAttribute("data-lucide", sidebar.classList.contains("collapsed") ? "panel-left-open" : "panel-left-close");
-      lucide.createIcons();
-    };
-
-    function renderSidebar() {
-      const nav = document.getElementById("sidebar-nav");
-      nav.innerHTML = CONFIG.menuTabs.map(tab => {
-        const isActive = (currentTab === tab.id) || (currentTab === "vehicle-detail" && tab.id === "vehicules");
-        return `
-          <button onclick="navigateTo('${tab.id}')" title="${tab.label}"
-            class="nav-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition ${
-              isActive
-                ? "bg-white text-slate-900 shadow-xs"
-                : "text-slate-300 hover:bg-slate-800 hover:text-white"
-            }">
-            <i data-lucide="${tab.icon}" class="w-4 h-4 shrink-0"></i>
-            <span class="sidebar-text truncate">${tab.label}</span>
-          </button>
-        `;
-      }).join("");
-      lucide.createIcons();
-    }
-
-    function renderHomeVehiclesSummary() {
-      const container = document.getElementById("home-vehicles-summary");
-      container.innerHTML = CONFIG.vehicles.map(v => `
-        <button onclick="openVehicleDetail('${v.id}')" class="p-4 rounded-2xl border border-slate-200 hover:border-slate-900 bg-slate-50/70 hover:bg-white text-left transition group shadow-2xs">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center gap-2.5">
-              <span class="w-9 h-9 rounded-xl bg-slate-900 text-white font-black text-sm flex items-center justify-center group-hover:bg-red-600 transition">${v.code}</span>
-              <div>
-                <p class="text-sm font-extrabold text-slate-900">${v.name}</p>
-                <p class="text-[11px] text-slate-400 font-mono">${v.plate}</p>
-              </div>
-            </div>
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">${v.status}</span>
-          </div>
-          <div class="pt-2.5 mt-2 border-t border-slate-200/70 flex items-center justify-between text-[11px] text-slate-500">
-            <span>Dernier contrôle : ${v.lastCheck || "À effectuer"}</span>
-            <span class="font-bold text-slate-800 group-hover:translate-x-0.5 transition">Ouvrir →</span>
-          </div>
-        </button>
-      `).join("");
-    }
-
-    window.navigateTo = function (tabId) {
-      currentTab = tabId;
-      ["screen-accueil", "screen-pharmacie", "screen-vehicules", "screen-vehicle-detail", "screen-custom"].forEach(id => {
-        document.getElementById(id).classList.add("hidden");
-      });
-
-      const tabObj = CONFIG.menuTabs.find(t => t.id === tabId);
-      const breadcrumb = document.getElementById("breadcrumb");
-
-      if (tabId === "accueil") {
-        document.getElementById("screen-accueil").classList.remove("hidden");
-        breadcrumb.innerHTML = `<span>Accueil</span>`;
-        renderHomeVehiclesSummary();
-      } else if (tabId === "pharmacie") {
-        document.getElementById("screen-pharmacie").classList.remove("hidden");
-        breadcrumb.innerHTML = `<span>Accueil</span> <span class="text-slate-400">/</span> <span>Pharmacie</span>`;
-      } else if (tabId === "vehicules") {
-        document.getElementById("screen-vehicules").classList.remove("hidden");
-        breadcrumb.innerHTML = `<span>Accueil</span> <span class="text-slate-400">/</span> <span>Véhicules</span>`;
-        renderVehiclesGrid();
-      } else if (tabObj && tabObj.isCustom) {
-        document.getElementById("screen-custom").classList.remove("hidden");
-        document.getElementById("custom-screen-title").textContent = tabObj.label;
-        breadcrumb.innerHTML = `<span>Accueil</span> <span class="text-slate-400">/</span> <span>${tabObj.label}</span>`;
-      }
-
-      renderSidebar();
-    };
-
-    function renderVehiclesGrid() {
-      const grid = document.getElementById("vehicles-grid");
-      grid.innerHTML = CONFIG.vehicles.map(v => `
-        <button onclick="openVehicleDetail('${v.id}')"
-          class="bg-white rounded-2xl p-6 border-2 border-slate-200 hover:border-slate-900 text-left transition shadow-xs flex flex-col justify-between gap-4 group">
-          <div class="flex items-center justify-between">
-            <span class="text-2xl font-black text-slate-900 tracking-tight">${v.code}</span>
-            <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800">${v.status}</span>
-          </div>
-          <div>
-            <p class="font-bold text-sm text-slate-800">${v.name}</p>
-            <p class="text-xs text-slate-400 font-mono mt-0.5">${v.plate}</p>
-          </div>
-          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-600 group-hover:text-slate-900">
-            <span>Ouvrir la fiche véhicule</span>
-            <i data-lucide="arrow-right" class="w-4 h-4"></i>
-          </div>
-        </button>
-      `).join("");
-      lucide.createIcons();
-    }
-
-    window.openVehicleDetail = function (vehicleId) {
-      selectedVehicle = CONFIG.vehicles.find(v => v.id === vehicleId);
-      if (!selectedVehicle) return;
-
-      currentTab = "vehicle-detail";
-      ["screen-accueil", "screen-pharmacie", "screen-vehicules", "screen-custom"].forEach(id => {
-        document.getElementById(id).classList.add("hidden");
-      });
-      document.getElementById("screen-vehicle-detail").classList.remove("hidden");
-
-      document.getElementById("detail-vehicle-title").textContent = `${selectedVehicle.code} — ${selectedVehicle.name}`;
-      document.getElementById("detail-vehicle-subtitle").textContent = `Immatriculation : ${selectedVehicle.plate} • Statut : ${selectedVehicle.status}`;
-      document.getElementById("breadcrumb").innerHTML = `
-        <span>Accueil</span>
-        <span class="text-slate-400">/</span>
-        <button onclick="navigateTo('vehicules')" class="hover:underline">Véhicules</button>
-        <span class="text-slate-400">/</span>
-        <span class="text-slate-900">${selectedVehicle.code}</span>
-      `;
-
-      renderVehicleChecklists();
-      switchVehicleSubtab("exterieur");
-      renderSidebar();
-    };
-
-    window.switchVehicleSubtab = function (subtab) {
-      ["exterieur", "armement", "nettoyage"].forEach(key => {
-        const btn = document.getElementById(`subtab-btn-${key}`);
-        const view = document.getElementById(`subview-${key}`);
-        if (key === subtab) {
-          btn.classList.remove("border-transparent", "text-slate-500");
-          btn.classList.add("border-slate-900", "text-slate-900");
-          view.classList.remove("hidden");
-        } else {
-          btn.classList.add("border-transparent", "text-slate-500");
-          btn.classList.remove("border-slate-900", "text-slate-900");
-          view.classList.add("hidden");
-        }
-      });
-    };
-
-    function renderVehicleChecklists() {
-      ["exterieur", "armement", "nettoyage"].forEach(section => {
-        const container = document.getElementById(`checklist-${section}`);
-        const items = CONFIG.vehicleChecklistTemplate[section] || [];
-        container.innerHTML = items.map(label => `
-          <label class="flex items-center gap-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer">
-            <input type="checkbox" class="w-4 h-4 rounded border-slate-300 text-slate-900 focus:ring-slate-900" />
-            <span class="text-sm font-medium text-slate-800">${label}</span>
-          </label>
-        `).join("");
-      });
-    }
-
-    navigateTo("accueil");
-  </script>
-</body>
-</html>
+<body class="min-h-screen flex overflow-x-hidden">
+<aside id="sidebar" class="bg-slate-950 text-white min-h-screen sticky top-0 h-screen z-30 flex flex-col">
+ <div class="brand h-[72px] px-4 flex items-center justify-between border-b border-slate-800 gap-3">
+  <div class="flex items-center gap-3 min-w-0"><div class="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center shadow-lg shadow-red-950/30"><i data-lucide="cross" class="w-5 h-5"></i></div><div class="brand-copy min-w-0"><div class="font-black text-sm tracking-tight">AMBU<span class="text-red-400">PILOT</span></div><div class="text-[10px] text-slate-400">Espace de gestion</div></div></div>
+  <button onclick="toggleSidebar()" class="brand-copy p-2 rounded-lg bg-slate-800 hover:bg-slate-700"><i data-lucide="panel-left-close" class="w-4 h-4"></i></button>
+ </div>
+ <div class="px-3 pt-4 pb-2"><div class="nav-label eyebrow text-slate-500 px-3 mb-2">Espace de travail</div><nav id="nav" class="space-y-1"></nav></div>
+ <div class="mt-auto p-3 border-t border-slate-800"><div class="side-foot flex items-center gap-2 px-2 py-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span><span class="text-[10px] text-slate-400">Plateforme opérationnelle</span></div><button onclick="openProfileMenu()" class="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-800 text-left"><div class="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center text-xs font-black" id="avatar">AD</div><div class="nav-label min-w-0 flex-1"><div class="text-xs font-bold" id="side-user">Alexandre Durand</div><div class="text-[10px] text-slate-400" id="side-role">Direction</div></div><i data-lucide="chevrons-up-down" class="nav-label w-4 h-4 text-slate-500"></i></button></div>
+</aside>
+<div class="flex-1 min-w-0 flex flex-col">
+<header class="h-[72px] bg-white/90 backdrop-blur border-b border-slate-200 sticky top-0 z-20 px-5 md:px-8 flex items-center justify-between gap-4">
+ <div class="flex items-center gap-3 min-w-0"><button class="p-2 rounded-lg hover:bg-slate-100" onclick="toggleSidebar()"><i data-lucide="menu" class="w-5 h-5"></i></button><div class="min-w-0"><div id="crumb" class="text-xs font-extrabold text-slate-800">Accueil</div><div class="text-[10px] text-slate-400 hidden sm:block">Société Ambulances du Centre</div></div></div>
+ <div class="flex items-center gap-2 md:gap-4"><span id="date" class="desktop-date text-[11px] text-slate-500 font-semibold"></span><button class="relative p-2 rounded-xl hover:bg-slate-100" onclick="showToast('Aucune nouvelle notification')"><i data-lucide="bell" class="w-5 h-5 text-slate-600"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span></button><div class="hidden sm:block h-8 w-px bg-slate-200"></div><div class="hidden sm:flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-black" id="top-avatar">AD</div><div><div class="text-[11px] font-extrabold" id="top-user">Alexandre Durand</div><div class="text-[9px] text-slate-400" id="top-role">Direction</div></div></div></div>
+</header>
+<main class="main-pad w-full max-w-[1500px] mx-auto p-6 md:p-8 space-y-6" id="main">
+<section id="screen-home" class="space-y-6">
+ <div class="hero rounded-[24px] p-7 md:p-9 text-white shadow-xl overflow-hidden"><div class="hero-inner relative z-10 flex items-center justify-between gap-8"><div class="max-w-2xl"><div class="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3 py-1.5 text-[10px] font-bold text-slate-200 mb-4"><span class="w-2 h-2 bg-emerald-400 rounded-full"></span><span id="hero-kicker">ESPACE DIRECTION · VUE D'ENSEMBLE</span></div><h1 class="text-2xl md:text-3xl font-black tracking-tight" id="hero-title">Pilotez votre activité en un seul endroit.</h1><p class="text-sm text-slate-300 leading-relaxed mt-3 max-w-xl" id="hero-desc">Retrouvez les informations essentielles de votre parc, de votre pharmacie et de vos équipes.</p></div><div class="hero-actions flex flex-wrap gap-2 shrink-0" id="hero-actions"><button class="btn btn-red" onclick="go('vehicules')"><i data-lucide="truck" class="w-4 h-4"></i>Voir le parc</button><button class="btn bg-white/10 text-white border border-white/20 hover:bg-white/20" onclick="go('documents')"><i data-lucide="folder-open" class="w-4 h-4"></i>Documents</button></div></div></div>
+ <div id="kpis" class="kpi-grid grid grid-cols-2 xl:grid-cols-4 gap-4"></div>
+ <div class="content-grid grid grid-cols-1 xl:grid-cols-3 gap-5"><div class="xl:col-span-2 space-y-5"><div class="card p-5"><div class="flex items-center justify-between gap-3 mb-4"><div><div class="section-title">État du parc ambulances</div><div class="text-[11px] text-slate-400 mt-1">Disponibilité et derniers contrôles</div></div><button class="text-[11px] font-extrabold text-slate-500 hover:text-red-600" onclick="go('vehicules')">Voir le parc →</button></div><div id="home-fleet" class="grid sm:grid-cols-2 gap-3"></div></div><div class="card p-5"><div class="flex items-center justify-between mb-4"><div><div class="section-title">Activité récente</div><div class="text-[11px] text-slate-400 mt-1">Dernières opérations enregistrées</div></div><span class="tag bg-slate-100 text-slate-500">Exemple de démonstration</span></div><div id="activity" class="space-y-3"></div></div></div><div class="space-y-5"><div class="card p-5"><div class="flex items-center gap-2 mb-4"><div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center"><i data-lucide="megaphone" class="w-4 h-4"></i></div><div class="section-title">Alertes & rappels</div></div><div id="alerts" class="space-y-3"></div></div><div class="card p-5"><div class="section-title mb-3">Accès rapides</div><div class="grid grid-cols-2 gap-2" id="quick-links"></div></div></div></div>
+</section>
+<section id="screen-vehicules" class="hidden space-y-5"><div class="flex flex-wrap items-end justify-between gap-3"><div><div class="eyebrow">Gestion du parc</div><h1 class="text-2xl font-black tracking-tight mt-1">Véhicules</h1><p class="text-xs text-slate-500 mt-1">Suivi de la disponibilité, des contrôles et de la maintenance.</p></div><button class="btn btn-red" onclick="showToast('Création de véhicule : aperçu de démonstration')"><i data-lucide="plus" class="w-4 h-4"></i>Ajouter un véhicule</button></div><div class="grid grid-cols-2 lg:grid-cols-4 gap-3" id="fleet-kpis"></div><div class="card overflow-hidden"><div class="p-5 flex flex-wrap justify-between items-center gap-3"><div class="section-title">Parc de la société</div><input class="field max-w-xs" placeholder="Rechercher un véhicule…" oninput="filterVehicles(this.value)"></div><div id="vehicle-list"></div></div></section>
+<section id="screen-pharmacie" class="hidden space-y-5"><div class="flex flex-wrap items-end justify-between gap-3"><div><div class="eyebrow">Stocks & dotations</div><h1 class="text-2xl font-black mt-1">Pharmacie</h1><p class="text-xs text-slate-500 mt-1">Suivi des produits, lots, seuils et dates de péremption.</p></div><button class="btn btn-red" onclick="showToast('Ajout de produit : aperçu de démonstration')"><i data-lucide="plus" class="w-4 h-4"></i>Ajouter un produit</button></div><div class="grid grid-cols-2 lg:grid-cols-4 gap-3" id="pharma-kpis"></div><div class="card overflow-hidden"><div class="p-5 flex justify-between items-center gap-3"><div class="section-title">État des stocks</div><input class="field max-w-xs" placeholder="Rechercher un produit…" oninput="filterProducts(this.value)"></div><div id="product-list"></div></div><div class="card p-5"><div class="section-title mb-2">À surveiller</div><div class="text-xs text-slate-500">Les alertes de péremption et de seuil minimum seront regroupées ici. Les données affichées sont fictives pour la maquette.</div></div></section>
+<section id="screen-documents" class="hidden space-y-5"><div class="flex flex-wrap items-end justify-between gap-3"><div><div class="eyebrow">Bibliothèque de la société</div><h1 class="text-2xl font-black mt-1">Documents</h1><p class="text-xs text-slate-500 mt-1">Retrouvez les procédures, justificatifs et documents de référence.</p></div><button class="btn btn-red" onclick="showToast('Import de document : aperçu de démonstration')"><i data-lucide="upload" class="w-4 h-4"></i>Importer un document</button></div><div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-3" id="doc-folders"></div><div class="card overflow-hidden"><div class="p-5 flex justify-between items-center"><div class="section-title">Documents récents</div><span class="tag bg-blue-50 text-blue-700">Bibliothèque de démonstration</span></div><div id="doc-list"></div></div></section>
+<section id="screen-planning" class="hidden space-y-5"><div class="eyebrow">Organisation</div><h1 class="text-2xl font-black">Planning</h1><div class="card p-8 text-center"><i data-lucide="calendar-days" class="w-9 h-9 mx-auto text-slate-300"></i><h2 class="font-extrabold mt-3">Module prévu dans une prochaine version</h2><p class="text-xs text-slate-500 mt-2">L'espace est réservé pour la gestion des gardes, des équipages et des disponibilités.</p></div></section>
+<section id="screen-equipe" class="hidden space-y-5"><div class="eyebrow">Administration</div><h1 class="text-2xl font-black">Membres & utilisateurs</h1><div class="card p-8 text-center"><i data-lucide="users" class="w-9 h-9 mx-auto text-slate-300"></i><h2 class="font-extrabold mt-3">Gestion des profils</h2><p class="text-xs text-slate-500 mt-2">Les comptes, rôles et rattachements à la société seront configurés ici.</p></div></section>
+<section id="screen-parametres" class="hidden space-y-5"><div class="eyebrow">Configuration</div><h1 class="text-2xl font-black">Paramètres</h1><div class="card p-5 max-w-2xl"><div class="section-title mb-4">Personnalisation de l'espace</div><label class="text-xs font-bold text-slate-600">Nom de la société</label><input class="field mt-2" value="Ambulances du Centre"><p class="text-[10px] text-slate-400 mt-2">Dans la version connectée, ces paramètres seront propres à chaque société.</p></div></section>
+</main>
+</div>
+<div id="profile-pop" class="hidden fixed bottom-20 left-4 z-50 card p-3 w-64 shadow-2xl"><div class="eyebrow mb-2">Prévisualiser l'application</div><label class="text-[11px] font-bold text-slate-600">Afficher l'espace selon le profil</label><select id="role-select" class="field mt-2" onchange="setRole(this.value)"><option value="direction">Direction / Administrateur</option><option value="vehicules">Responsable véhicules</option><option value="pharmacie">Responsable pharmacie</option><option value="ambulancier">Ambulancier</option></select><p class="text-[10px] text-slate-400 mt-2">Sélecteur de démonstration : il simule les vues et menus, sans authentification réelle.</p></div>
+<div id="toast" class="fixed bottom-5 right-5 z-[60] hidden bg-slate-900 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-xl"></div>
+<script>
+const roles={
+ direction:{label:'Direction',name:'Alexandre Durand',initials:'AD',kicker:'ESPACE DIRECTION · VUE D’ENSEMBLE',title:'Pilotez votre activité en un seul endroit.',desc:'Retrouvez les informations essentielles de votre parc, de votre pharmacie et de vos équipes.',nav:['accueil','vehicules','pharmacie','documents','planning','equipe','parametres']},
+ vehicules:{label:'Responsable véhicules',name:'Thomas Martin',initials:'TM',kicker:'RESPONSABLE PARC · SUIVI TECHNIQUE',title:'Gardez votre flotte prête à partir.',desc:'Suivez les contrôles, les disponibilités, les échéances et les opérations de maintenance de vos ambulances.',nav:['accueil','vehicules','documents']},
+ pharmacie:{label:'Responsable pharmacie',name:'Camille Bernard',initials:'CB',kicker:'RESPONSABLE PHARMACIE · GESTION DES STOCKS',title:'Maîtrisez vos stocks et vos dotations.',desc:'Surveillez les niveaux de réserve, les lots, les péremptions et les besoins de réapprovisionnement.',nav:['accueil','pharmacie','documents']},
+ ambulancier:{label:'Ambulancier',name:'Julien Moreau',initials:'JM',kicker:'ESPACE ÉQUIPE · PRÉPARATION DE SERVICE',title:'Toutes les informations utiles avant votre service.',desc:'Retrouvez les consignes, les documents utiles et les informations concernant votre véhicule affecté.',nav:['accueil','vehicules','documents','planning']}
+};
+const navItems=[['accueil','Accueil','layout-dashboard'],['vehicules','Véhicules','truck'],['pharmacie','Pharmacie','pill'],['documents','Documents','folder-open'],['planning','Planning','calendar-days'],['equipe','Membres','users'],['parametres','Paramètres','settings']];
+const vehicles=[{code:'A1',name:'Ambulance 1',plate:'AA-123-BB',status:'Opérationnel',check:'Aujourd’hui · 08:15',km:'82 450 km',due:'Révision dans 24 jours',tone:'emerald'},{code:'A2',name:'Ambulance 2',plate:'CC-456-DD',status:'À contrôler',check:'Hier · 14:20',km:'64 210 km',due:'Contrôle à effectuer',tone:'amber'},{code:'A3',name:'Ambulance 3',plate:'EE-789-FF',status:'Maintenance',check:'10 nov. · 09:30',km:'103 800 km',due:'Immobilisée · atelier',tone:'red'}];
+const products=[{name:'Compresses stériles',ref:'PH-001',stock:18,min:20,lot:'LOT-24081',expiry:'12/2027',state:'Stock bas',tone:'amber'},{name:'Antiseptique cutané',ref:'PH-014',stock:42,min:15,lot:'LOT-24092',expiry:'02/2027',state:'Conforme',tone:'emerald'},{name:'Pansements adhésifs',ref:'PH-022',stock:8,min:12,lot:'LOT-24110',expiry:'01/2027',state:'Stock bas',tone:'amber'},{name:'Solution hydroalcoolique',ref:'PH-031',stock:26,min:10,lot:'LOT-23874',expiry:'12/2026',state:'Péremption proche',tone:'red'}];
+const docs=[['Procédures opérationnelles','12 fichiers','file-text','blue'],['Documents véhicules','8 fichiers','truck','slate'],['Pharmacie & protocoles','15 fichiers','pill','emerald'],['Administratif & société','9 fichiers','briefcase-business','amber']];
+let role='direction',active='accueil';
+function icon(name,cls='w-4 h-4'){return `<i data-lucide="${name}" class="${cls}"></i>`}function drawIcons(){if(window.lucide)lucide.createIcons()}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('collapsed')}
+function openProfileMenu(){document.getElementById('profile-pop').classList.toggle('hidden')}
+function setRole(r){role=r;document.getElementById('profile-pop').classList.add('hidden');renderAll();go('accueil')}
+function renderNav(){const allowed=roles[role].nav;document.getElementById('nav').innerHTML=navItems.filter(n=>allowed.includes(n[0])).map(n=>`<button class="nav-link ${active===n[0]?'active':''}" onclick="go('${n[0]}')" title="${n[1]}">${icon(n[2])}<span class="nav-label">${n[1]}</span></button>`).join('');}
+function go(id){active=id;document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));const target=document.getElementById('screen-'+id);if(target)target.classList.remove('hidden');document.getElementById('crumb').textContent=(navItems.find(n=>n[0]===id)||['','Accueil'])[1];renderNav();drawIcons();}
+function toneClass(t){return t==='emerald'?'bg-emerald-50 text-emerald-700':t==='amber'?'bg-amber-50 text-amber-700':'bg-red-50 text-red-700'}
+function renderHome(){const r=roles[role];document.getElementById('hero-kicker').textContent=r.kicker;document.getElementById('hero-title').textContent=r.title;document.getElementById('hero-desc').textContent=r.desc;document.getElementById('hero-actions').innerHTML=role==='ambulancier'?`<button class="btn btn-red" onclick="go('vehicules')">${icon('clipboard-check')}Mon véhicule</button><button class="btn bg-white/10 text-white border border-white/20" onclick="go('documents')">${icon('book-open')}Consignes</button>`:role==='vehicules'?`<button class="btn btn-red" onclick="go('vehicules')">${icon('clipboard-check')}Contrôles à effectuer</button>`:role==='pharmacie'?`<button class="btn btn-red" onclick="go('pharmacie')">${icon('package-plus')}Voir les stocks</button>`:`<button class="btn btn-red" onclick="go('vehicules')">${icon('truck')}Gérer le parc</button><button class="btn bg-white/10 text-white border border-white/20" onclick="go('pharmacie')">${icon('pill')}Pharmacie</button>`;
+let kpis=role==='ambulancier'?[['calendar-check','Prochain service','Demain · 07:00','Planning','blue'],['truck','Véhicule affecté','Ambulance A1','Prêt au départ','emerald'],['clipboard-check','Contrôle du jour','À réaliser','Avant prise de service','amber'],['folder-check','Consignes','4 documents','À consulter','slate']]:role==='vehicules'?[['truck','Véhicules suivis','3','Parc de la société','blue'],['check-circle','Opérationnels','1 / 3','Disponibilité','emerald'],['clipboard-list','Contrôles à faire','1','À traiter','amber'],['wrench','Maintenance','1','Véhicule immobilisé','red']]:role==='pharmacie'?[['package','Références','4','Produits suivis','blue'],['package-x','Stocks bas','2','Sous le seuil minimum','amber'],['calendar-clock','Péremptions','1','À surveiller','red'],['clipboard-check','Dotations','2 / 3','Véhicules vérifiés','emerald']]:[['truck','Parc opérationnel','1 / 3','Véhicules disponibles','emerald'],['pill','Alertes pharmacie','3','Stocks et péremptions','amber'],['file-text','Documents actifs','44','Bibliothèque société','blue'],['users','Équipe','18','Comptes utilisateurs','slate']];
+document.getElementById('kpis').innerHTML=kpis.map(k=>`<div class="card kpi"><div class="flex justify-between items-start"><div class="w-9 h-9 rounded-xl flex items-center justify-center ${toneClass(k[4])}">${icon(k[0],'w-4 h-4')}</div><span class="tag ${toneClass(k[4])}">${k[3]}</span></div><div class="text-2xl font-black tracking-tight mt-3">${k[1]==='Prochain service'?'Demain':k[1]==='Véhicule affecté'?'A1':k[1]==='Contrôle du jour'?'À faire':k[1]==='Consignes'?'4':k[1]==='Parc opérationnel'?'1 / 3':k[1]==='Alertes pharmacie'?'3':k[1]==='Documents actifs'?'44':k[1]==='Équipe'?'18':k[1]==='Véhicules suivis'?'3':k[1]==='Opérationnels'?'1 / 3':k[1]==='Contrôles à faire'?'1':k[1]==='Maintenance'?'1':k[1]==='Références'?'4':k[1]==='Stocks bas'?'2':k[1]==='Péremptions'?'1':'2 / 3'}</div><div class="text-[11px] text-slate-500 font-semibold mt-1">${k[1]}</div></div>`).join('');
+document.getElementById('home-fleet').innerHTML=vehicles.slice(0,role==='ambulancier'?1:3).map(v=>`<button onclick="go('vehicules')" class="border border-slate-200 rounded-xl p-4 text-left hover:border-slate-400 transition"><div class="flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center text-xs font-black">${v.code}</div><div><div class="text-xs font-extrabold">${v.name}</div><div class="text-[10px] text-slate-400">${v.plate}</div></div></div><span class="pill ${toneClass(v.tone)}">${v.status}</span></div><div class="border-t border-slate-100 mt-3 pt-3 flex justify-between text-[10px] text-slate-500"><span>Contrôle : ${v.check}</span><b class="text-slate-700">Ouvrir →</b></div></button>`).join('');
+const activities=role==='ambulancier'?[['clipboard-check','Votre contrôle de prise de service est à réaliser','Avant départ','amber'],['file-text','Nouvelle consigne disponible','Aujourd’hui','blue']]:[['check-circle','Contrôle véhicule validé — Ambulance A1','08:15','emerald'],['package-check','Réapprovisionnement de la réserve','Hier','blue'],['wrench','Ambulance A3 déclarée en maintenance','Hier','amber']];document.getElementById('activity').innerHTML=activities.map(a=>`<div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg ${toneClass(a[3])} flex items-center justify-center">${icon(a[0])}</div><div class="min-w-0 flex-1"><div class="text-[11px] font-bold">${a[1]}</div><div class="text-[10px] text-slate-400">${a[2]}</div></div></div>`).join('');
+const alerts=role==='ambulancier'?[['Contrôle avant départ','Pensez à réaliser le contrôle de votre véhicule.','amber'],['Consignes mises à jour','Consultez les dernières consignes de service.','blue']]:role==='pharmacie'?[['2 références sous le seuil','Vérifier les besoins de réapprovisionnement.','amber'],['1 péremption proche','Lot à contrôler avant fin décembre.','red']]:role==='vehicules'?[['1 contrôle à effectuer','Ambulance A2 nécessite une vérification.','amber'],['1 véhicule en maintenance','Ambulance A3 est actuellement indisponible.','red']]:[['Disponibilité du parc','1 véhicule sur 3 opérationnel dans cette maquette.','amber'],['Pharmacie à surveiller','2 références basses et 1 péremption proche.','red'],['Échéance documentaire','Assurance véhicule à renouveler prochainement.','blue']];document.getElementById('alerts').innerHTML=alerts.map(a=>`<div class="rounded-xl p-3 ${toneClass(a[2])}"><div class="text-[11px] font-extrabold">${a[0]}</div><div class="text-[10px] mt-1 opacity-80 leading-relaxed">${a[1]}</div></div>`).join('');
+const links=role==='ambulancier'?[['Véhicule affecté','truck','vehicules'],['Consignes','book-open','documents']]:role==='vehicules'?[['Parc véhicules','truck','vehicules'],['Documents techniques','folder','documents']]:role==='pharmacie'?[['Stocks','pill','pharmacie'],['Protocoles','file-text','documents']]:[['Véhicules','truck','vehicules'],['Pharmacie','pill','pharmacie'],['Documents','folder','documents'],['Équipe','users','equipe']];document.getElementById('quick-links').innerHTML=links.map(l=>`<button onclick="go('${l[2]}')" class="rounded-xl bg-slate-50 hover:bg-slate-100 p-3 text-left"><div class="text-slate-600">${icon(l[1],'w-4 h-4')}</div><div class="text-[10px] font-extrabold mt-2">${l[0]}</div></button>`).join('');}
+function renderVehicles(){document.getElementById('fleet-kpis').innerHTML=[['3','Véhicules au parc'],['1','Opérationnel'],['1','À contrôler'],['1','En maintenance']].map((x,i)=>`<div class="card p-4"><div class="text-2xl font-black">${x[0]}</div><div class="text-[10px] text-slate-500 font-semibold mt-1">${x[1]}</div></div>`).join('');document.getElementById('vehicle-list').innerHTML=`<div class="table-row bg-slate-50 text-[9px] uppercase tracking-wider font-extrabold text-slate-400"><span>Véhicule</span><span>Statut</span><span>Dernier contrôle</span><span>Suivi</span></div>`+vehicles.map(v=>`<div class="table-row"><div><div class="font-extrabold text-slate-800">${v.code} · ${v.name}</div><div class="text-[10px] text-slate-400">${v.plate} · ${v.km}</div></div><div><span class="pill ${toneClass(v.tone)}">${v.status}</span></div><div class="text-slate-500">${v.check}</div><div class="font-bold text-slate-600">${v.due}</div></div>`).join('');}
+function filterVehicles(q){document.querySelectorAll('#vehicle-list .table-row:not(:first-child)').forEach(el=>el.style.display=el.textContent.toLowerCase().includes(q.toLowerCase())?'grid':'none')}
+function renderPharma(){document.getElementById('pharma-kpis').innerHTML=[['4','Références suivies'],['2','Stocks bas'],['1','Péremption proche'],['3','Lots actifs']].map(x=>`<div class="card p-4"><div class="text-2xl font-black">${x[0]}</div><div class="text-[10px] text-slate-500 font-semibold mt-1">${x[1]}</div></div>`).join('');document.getElementById('product-list').innerHTML=`<div class="table-row bg-slate-50 text-[9px] uppercase tracking-wider font-extrabold text-slate-400"><span>Produit / Référence</span><span>Stock</span><span>Lot / Péremption</span><span>État</span></div>`+products.map(p=>`<div class="table-row"><div><div class="font-extrabold">${p.name}</div><div class="text-[10px] text-slate-400">${p.ref}</div></div><div><b>${p.stock}</b><span class="text-slate-400"> / min. ${p.min}</span></div><div class="text-slate-500">${p.lot}<div class="text-[10px] text-slate-400">${p.expiry}</div></div><div><span class="pill ${toneClass(p.tone)}">${p.state}</span></div></div>`).join('');}
+function filterProducts(q){document.querySelectorAll('#product-list .table-row:not(:first-child)').forEach(el=>el.style.display=el.textContent.toLowerCase().includes(q.toLowerCase())?'grid':'none')}
+function renderDocs(){document.getElementById('doc-folders').innerHTML=docs.map(d=>`<button onclick="showToast('Ouverture du dossier : ${d[0]}')" class="card p-4 text-left hover:border-slate-400"><div class="w-10 h-10 rounded-xl ${toneClass(d[3])} flex items-center justify-center">${icon(d[2])}</div><div class="text-xs font-extrabold mt-3">${d[0]}</div><div class="text-[10px] text-slate-400 mt-1">${d[1]}</div></button>`).join('');const files=[['Procédure de prise de service','Procédures opérationnelles','PDF · Mis à jour le 04/11/2026','file-text'],['Fiche de contrôle ambulance','Documents véhicules','PDF · Mis à jour le 02/11/2026','truck'],['Protocole de réassort','Pharmacie & protocoles','PDF · Mis à jour le 28/10/2026','pill'],['Attestation assurance A1','Administratif & société','PDF · Échéance 15/12/2026','file-check']];document.getElementById('doc-list').innerHTML=files.map(f=>`<div class="flex items-center gap-3 px-5 py-4 border-t border-slate-100"><div class="w-9 h-9 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">${icon(f[3])}</div><div class="flex-1"><div class="text-[11px] font-extrabold">${f[0]}</div><div class="text-[10px] text-slate-400">${f[1]} · ${f[2]}</div></div><button class="btn btn-light" onclick="showToast('Aperçu du document de démonstration')">Consulter</button></div>`).join('');}
+function renderAll(){const r=roles[role];['side-user','top-user'].forEach(id=>document.getElementById(id).textContent=r.name);['side-role','top-role'].forEach(id=>document.getElementById(id).textContent=r.label);['avatar','top-avatar'].forEach(id=>document.getElementById(id).textContent=r.initials);document.getElementById('role-select').value=role;renderNav();renderHome();renderVehicles();renderPharma();renderDocs();drawIcons();}
+let toastTimer;function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.add('hidden'),2600)}
+document.getElementById('date').textContent=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});renderAll();go('accueil');
+</script>
+</body></html>
